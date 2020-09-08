@@ -1,0 +1,9 @@
+#checkout {
+	padding-top: 3.6rem;
+	overflow: scroll;
+}
+
+#checkout .navbar-toggler {
+    border: none;
+    padding: 0;
+}

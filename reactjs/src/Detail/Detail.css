@@ -1,0 +1,8 @@
+#detail {
+	padding-top: 4.0rem;
+	overflow: hidden;
+}
+
+#detail #product-img {
+	background-color: black;
+}

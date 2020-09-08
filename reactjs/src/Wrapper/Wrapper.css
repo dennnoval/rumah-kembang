@@ -1,0 +1,42 @@
+[id^="side-wrapper "] {
+	position: fixed;
+	z-index: 1032;
+	transition: all 0.5s ease-in-out;
+}
+
+[id^="side-wrapper "].active {
+	overflow: scroll;
+}
+
+[id^="side-wrapper "].left {
+	left: -100%;
+}
+
+[id^="side-wrapper "].top {
+	top: -100%;
+	max-height: 75%;
+}
+
+[id^="side-wrapper "].right {
+	right: -100%;
+}
+
+[id^="side-wrapper "].bottom {
+	bottom: -100%;
+}
+
+[id^="side-wrapper "].active.left {
+	left: 0%;
+}
+
+[id^="side-wrapper "].active.top {
+	top: 0%;
+}
+
+[id^="side-wrapper "].active.right {
+	right: 0%;
+}
+
+[id^="side-wrapper "].active.bottom {
+	bottom: 0%;
+}
