@@ -7,9 +7,11 @@ function Searching(props) {
 	useEffect(() => {
 		let source = axios.CancelToken.source()
 
-		Product.getProductByTag(source.token, props.searchQuery)
-      .then(res => props.callback(res.data))
-      .catch(error => console.log(error))
+		if (props.searchQuery !== "") {
+			Product.getProductByTag(source.token, props.searchQuery)
+	      .then(res => props.callback(res.data))
+	      .catch(error => console.log(error))
+    }
 
 		return () => source.cancel()
 	})

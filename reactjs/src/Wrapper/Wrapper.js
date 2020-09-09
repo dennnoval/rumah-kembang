@@ -13,14 +13,21 @@ function Wrapper(props) {
 	let [searchQuery, setSearchQuery] = useState("")
 	let [searchData, setSearchData] = useState({})
 
-	let content = function(e) {
+	let content = function() {
 		if (ids === " search-button top-side")
 			return(
 				<>
 					<div className={active ? "fixed-top p-2 bg-light border-bottom rounded-bottom" : ""}>
-						<input onInput={e => setSearchQuery(e.currentTarget.value)} type="text" className="form-control form-control-sm" placeholder="Cari tag produk..."/>
+						<input id="searchInput" onInput={e => setSearchQuery(e.currentTarget.value)} type="text" className="form-control form-control-sm" placeholder="Cari tag produk..."/>
 					</div>
-					{searchResults(searchQuery)}
+					{(active !== false) ? searchResults(searchQuery) 
+						: () => {
+							const searchInput = document.getElementById("searchInput")
+							searchInput.value = ""
+							setSearchQuery(searchInput.value)
+							return (<></>)
+						}
+					}
 				</>
 			)
 		else return(
@@ -30,19 +37,6 @@ function Wrapper(props) {
 		)
 	}
 
-	let searchList = (value, data, index) => {
-		let tags = data.tags.split(", ")
-		for (let x in tags) {
-			if (tags[x].indexOf(value) !== -1)
-				return(
-					<Link key={data.kode} to={"/produk/" + data.kode} className="list-group-item list-item-action flex-fill">
-						<img src={data.foto} className="img-fluid w-25" alt={"Photo: " + data.kode}/>
-						<span className="ml-3">{tags[x]}</span>
-					</Link>
-				)
-		}
-	}
-
 	let searchResults = value => {
 		if (value !== "") {
 			return(
@@ -50,7 +44,7 @@ function Wrapper(props) {
 					<p>Hasil pencarian : <b>{value}</b></p>
 					<Searching searchQuery={searchQuery} callback={data => setSearchData(data)} />
 					<div className="list-unstyled list-group">
-						{(searchData.result === undefined) ? ""
+						{(searchData.result === undefined) ? <></>
 							: searchData.result.map((data, index) => searchList(value, data, index))
 						}
 					</div>
@@ -58,6 +52,19 @@ function Wrapper(props) {
 			)
 		} else {
 			return ""
+		}
+	}
+
+	let searchList = (value, data, index) => {
+		let tags = data.tags.split(", ")
+		for (let x in tags) {
+			if (tags[x].indexOf(value) !== -1)
+				return(
+					<Link key={data.kode} to={"/produk/" + data.kode} className="list-group-item list-item-action flex-fill p-1">
+						<img src={data.foto} className="img-fluid w-25" alt={"Photo: " + data.kode}/>
+						<span className="ml-3">{tags[x]}</span>
+					</Link>
+				)
 		}
 	}
 
