@@ -18,7 +18,7 @@ const carouselList = (args) => {
     <Carousel id="home-carousel">
       {args.result.map((carousel, index) => (
         <Carousel.Item as={Link} to={"/produk/"+carousel.kode} key={carousel.id} className="text-center">
-          <img src={carousel.banner} className="w-75 text-white" alt={"Slide " + (index+1)}/>
+          <img src={carousel.banner} className="text-white" alt={"Slide " + (index+1)}/>
         </Carousel.Item>
       ))}
     </Carousel>
@@ -52,7 +52,7 @@ const recommendList = (...args) => {
             <Link key={index + Math.random(9)} to={"/produk/" + product.kode} className="list-group-item text-decoration-none p-1 border-0 rounded-0 text-dark text-center col-6">
               <div className="card list-group-item-action" value={product.kode}>
                 <img src={product.foto} className="card-img-top p-1 border-bottom" alt={"Photo: " + product.kode}/>
-                <p className="card-text"><small>{product.kode}</small></p>
+                <p className="card-text"><small><b>{product.kode}</b></small></p>
               </div>
             </Link>
           ))

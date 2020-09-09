@@ -55,7 +55,7 @@ function Checkout(props) {
   return(
   	<main id="checkout">
   		<div className="container my-2 py-2 bg-light">
-				<h6>INFORMASI PEMESANAN</h6>
+				<h6><b>INFORMASI PEMESANAN</b></h6>
 				<form method="POST" id="checkout_form" className="mt-3" onSubmit={submitForm}>
 					<div className="form-group">
 						<input type="text" className="form-control form-control-sm" placeholder="Nama lengkap" required/>

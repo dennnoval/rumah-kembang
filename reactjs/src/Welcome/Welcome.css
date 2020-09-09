@@ -17,6 +17,11 @@
 	bottom: -8%;
 }
 
+#home-carousel .carousel-item > img {
+	object-fit: contain;
+	height: 250px;
+} 
+
 .card-img-top {
 	max-height: 8em;
 	object-fit: contain;
