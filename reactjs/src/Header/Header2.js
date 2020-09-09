@@ -22,8 +22,8 @@ function Header2(props) {
         </div>
       	<div className={"col pl-1 pr-0 justify-content-start"}>
       		{(url1 === "kategori") 
-      			? (<span className="navbar-brand text-capitalize">{title.replace("-", " ")}</span>)
-	    			: (<span className="navbar-brand">{"#" + title.replace("-", " ")}</span>)
+      			? (<span className="navbar-brand text-capitalize"><b>{title.replace("-", " ")}</b></span>)
+	    			: (<span className="navbar-brand"><b>{"#" + title.replace("-", " ")}</b></span>)
 	      	}
 				</div>
 				<div className="row col mr-2 justify-content-end">

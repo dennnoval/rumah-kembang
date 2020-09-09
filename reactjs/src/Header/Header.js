@@ -14,7 +14,7 @@ function Header(props) {
       	<div className="col-8 pl-2 pr-0 justify-content-start">
 	      	<Link to="/#" className="navbar-brand mr-0">
 						{/* <img src={brandLogo} className="img-fluid" loading="lazy" alt="Alfinza-Florist"/> */}
-						<span className="text-dark font-italic ml-1">Rumah Kembang</span>
+						<span className="text-dark font-italic ml-1"><b>Rumah Kembang</b></span>
 					</Link>
 				</div>
 				<div className="row col mr-2 justify-content-end">

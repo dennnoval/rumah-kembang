@@ -16,3 +16,8 @@
 #home-carousel.carousel.slide .carousel-indicators {
 	bottom: -8%;
 }
+
+.card-img-top {
+	max-height: 8em;
+	object-fit: contain;
+}

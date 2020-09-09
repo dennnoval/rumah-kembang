@@ -34,7 +34,7 @@ function Categories(props) {
                     <Link key={index + Math.random(9)} to={"/produk/" + product.kode} className="list-group-item text-decoration-none p-1 border-0 rounded-0 text-dark text-center col-6">
                       <div className="card list-group-item-action" value="product-id">
                         <img src={product.foto} className="card-img-top p-1 border-bottom" alt="..."/>
-                        <small className="card-text">{product.kode}</small>
+                        <small className="card-text"><b>{product.kode}</b></small>
                       </div>
                     </Link>
                   ))

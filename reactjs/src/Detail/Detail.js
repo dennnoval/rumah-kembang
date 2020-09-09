@@ -105,7 +105,7 @@ function Detail(props) {
                     : !isLoaded ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
                     : (productByKode.result === undefined) ? "Error! Couldnt fetch data"
                     : productByKode.result[0].tags.split(",").map((tag, index) => (
-                        <Link key={tag + Math.random(1)} className="text-link" to={"/tag/" + tag}>
+                        <Link key={tag + Math.random(1)} className="text-link" to={"/tag/" + tag.trim()}>
                           {"#" + tag.trim() + " "}
                         </Link>
                       ))

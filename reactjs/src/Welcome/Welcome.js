@@ -17,7 +17,7 @@ const carouselList = (args) => {
   else return(
     <Carousel id="home-carousel">
       {args.result.map((carousel, index) => (
-        <Carousel.Item key={carousel.id} className="text-center">
+        <Carousel.Item as={Link} to={"/produk/"+carousel.kode} key={carousel.id} className="text-center">
           <img src={carousel.banner} className="w-75 text-white" alt={"Slide " + (index+1)}/>
         </Carousel.Item>
       ))}
@@ -26,7 +26,7 @@ const carouselList = (args) => {
 }
 
 const catList = (...args) => {
-  const catColor = ["danger", "warning", "success", "primary"]
+  const catColor = ["danger", "warning", "success", "primary", "secondary"]
   if (args[0]) return(<>{console.log(args[0])}</>)
   else if (!args[1]) return(<div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>)
   else return(
@@ -92,12 +92,12 @@ function Welcome(props) {
       {carouselList(allBanners)}
 
   		<div className="container mt-2 border bg-light py-3">
-  			<h6>KATEGORI</h6>
+  			<h6><b>KATEGORI</b></h6>
         {catList(error, isLoaded, allCategories)}
   		</div>
 
   		<div className="container mt-2 py-3 border bg-light">
-  			<h6>REKOMENDASI</h6>
+  			<h6><b>REKOMENDASI</b></h6>
   			{recommendList(error, isLoaded, recommendedProducts)}
   		</div>
 
@@ -107,9 +107,9 @@ function Welcome(props) {
             Follow us on : 
           </div>
           <div className="col px-0">
-            <Link to="/#instagram">
-              <img src={instagramIcon} className="img-fluid" alt="..." style={{"width":"25px"}}/>
-            </Link>
+            <a href="https://instagram.com/rumahkembang29" target="new-tab">
+              <img src={instagramIcon} className="img-fluid" alt="..." style={{"width":"20px"}}/>
+            </a>
           </div>
         </div>
       </div>
