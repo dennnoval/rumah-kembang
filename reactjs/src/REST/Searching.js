@@ -5,15 +5,18 @@ import Product from "../REST/Product"
 
 function Searching(props) {
 	useEffect(() => {
+		let mounted = props.mounted
 		let source = axios.CancelToken.source()
 
 		if (props.searchQuery !== "") {
 			Product.getProductByTag(source.token, props.searchQuery)
-	      .then(res => props.callback(res.data))
+	      .then(res => {if (mounted === true) {
+	      	props.callback(res.data)
+	      }})
 	      .catch(error => console.log(error))
     }
 
-		return () => source.cancel()
+		return () => {if (mounted === false) source.cancel()}
 	})
 
 	return(<></>)

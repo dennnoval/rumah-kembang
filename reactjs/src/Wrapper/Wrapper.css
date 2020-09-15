@@ -31,6 +31,7 @@
 
 [id^="side-wrapper "].active.top {
 	top: 0%;
+	position: fixed !important;
 }
 
 [id^="side-wrapper "].active.right {
@@ -39,4 +40,9 @@
 
 [id^="side-wrapper "].active.bottom {
 	bottom: 0%;
+	position: fixed !important;
+}
+
+#searchImg {
+	width: 20% !important;
 }

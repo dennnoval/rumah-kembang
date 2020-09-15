@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Switch, Route } from "react-router-dom"
 
 import Wrapper from "./Wrapper/Wrapper"
@@ -11,9 +11,9 @@ import Detail from "./Detail/Detail"
 import Checkout from "./Checkout/Checkout"
 
 function App(props) {
-	let [active, setActive] = useState(false)
-	let [classes, setClasses] = useState("left")
-  let [ids, setIds] = useState("")
+	let [active, setActive] = React.useState(false)
+	let [classes, setClasses] = React.useState("left")
+  let [ids, setIds] = React.useState("")
 
 	const toggleWrapper = (e) => {
 		e.preventDefault()
@@ -34,19 +34,13 @@ function App(props) {
           <Header toggleWrapper={toggleWrapper}/>
         	<Welcome/>
         </Route>
-        <Route path="/:type" component={props => (
-          <>
-            <Header2 toggleWrapper={toggleWrapper} {...props}/>
-            <Route exact path="/checkout" component={Checkout}/>
-            <Route exact path="/:type/:name" component={props => (
-              <>
-                <Route exact path="/kategori/:name" component={Categories}/>
-                <Route exact path="/tag/:tagName" component={Tags}/>
-                <Route exact path="/produk/:kode" component={Detail}/>
-              </>
-            )}/>
-          </>
-        )}/>
+        <Route path="/:type">
+          <Header2 toggleWrapper={toggleWrapper}/>
+          <Route exact path="/checkout" component={Checkout}/>
+          <Route exact path="/kategori/:categoryName" component={Categories}/>
+          <Route exact path="/tag/:tagName" component={Tags}/>
+          <Route exact path="/produk/:kode" component={Detail}/>
+        </Route>
         <Route exact path="/404"/>
       </Switch>
       <Wrapper active={active} ids={ids} classes={classes}/>

@@ -38,7 +38,7 @@ function Tags(props) {
   }
 
 	return(
-		<main id="categories">
+		<main id="tags">
 			<div className="container mb-3 border bg-light">
         {(error) ? console.log(error) 
           : (!isLoaded) ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from "react-router-dom"
 
 import "./Wrapper.css"
@@ -10,8 +10,17 @@ function Wrapper(props) {
 	let classes = " " + props.classes
 	let active = props.active
 
-	let [searchQuery, setSearchQuery] = useState("")
-	let [searchData, setSearchData] = useState({})
+	let [searchQuery, setSearchQuery] = React.useState("")
+	let [searchData, setSearchData] = React.useState({})
+
+	React.useEffect(() => {
+    /* const mainElement = document.querySelector("main")
+    if (active === true) {
+      mainElement.setAttribute("class", "")
+    } else {
+    	mainElement.removeAttribute("class")
+    } */
+	})
 
 	let content = function() {
 		if (ids === " search-button top-side")
@@ -20,13 +29,8 @@ function Wrapper(props) {
 					<div className={active ? "fixed-top p-2 bg-light border-bottom rounded-bottom" : ""}>
 						<input id="searchInput" onInput={e => setSearchQuery(e.currentTarget.value)} type="text" className="form-control form-control-sm" placeholder="Cari tag produk..."/>
 					</div>
-					{(active !== false) ? searchResults(searchQuery) 
-						: () => {
-							const searchInput = document.getElementById("searchInput")
-							searchInput.value = ""
-							setSearchQuery(searchInput.value)
-							return (<></>)
-						}
+					{(active !== false && searchQuery !== "") ? searchResults(searchQuery) 
+						: <>{}</>
 					}
 				</>
 			)
@@ -38,21 +42,17 @@ function Wrapper(props) {
 	}
 
 	let searchResults = value => {
-		if (value !== "") {
-			return(
-				<div className="mt-5">
-					<p>Hasil pencarian : <b>{value}</b></p>
-					<Searching searchQuery={searchQuery} callback={data => setSearchData(data)} />
-					<div className="list-unstyled list-group">
-						{(searchData.result === undefined) ? <></>
-							: searchData.result.map((data, index) => searchList(value, data, index))
-						}
-					</div>
+		return(
+			<div className="mt-5">
+				<p>Hasil pencarian : <b>{value}</b></p>
+				<Searching mounted={active} searchQuery={searchQuery} callback={data => setSearchData(data)} />
+				<div className="list-unstyled list-group">
+					{(searchData.result === undefined) ? <></>
+						: searchData.result.map((data, index) => searchList(value, data, index))
+					}
 				</div>
-			)
-		} else {
-			return ""
-		}
+			</div>
+		)
 	}
 
 	let searchList = (value, data, index) => {
@@ -61,7 +61,7 @@ function Wrapper(props) {
 			if (tags[x].indexOf(value) !== -1)
 				return(
 					<Link key={data.kode} to={"/produk/" + data.kode} className="list-group-item list-item-action flex-fill p-1">
-						<img src={data.foto} className="img-fluid w-25" alt={"Photo: " + data.kode}/>
+						<img id="searchImg" src={data.foto} className="img-fluid" alt={"Photo: " + data.kode}/>
 						<span className="ml-3">{tags[x]}</span>
 					</Link>
 				)

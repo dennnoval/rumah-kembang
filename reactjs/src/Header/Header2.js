@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from "react-router-dom"
 
 import "./Header.css"
 
@@ -7,16 +8,18 @@ import iconCart from "../resources/icon-cart.svg"
 import iconArrowLeftShort from "../resources/icon-arrow-left-short.svg"
 
 function Header2(props) {
-	let url1 = window.location.hash.split("/")[1]
+	let location = useLocation()
+	
+	let url1 = location.pathname.split("/")[1]
 	let title = ""
-	if (window.location.hash.split("/")[2] !== undefined)
-		title = window.location.hash.split("/")[2]
+	if (location.pathname.split("/")[2] !== undefined)
+		title = location.pathname.split("/")[2]
 
 	return(
 		<header id="header2">
       <nav className="navbar fixed-top bg-light border-bottom p-0">
       	<div className="col-2 justify-content-start">
-	  			<span type="button" className="navbar-toggler" onClick={(e) => props.history.goBack()}>
+	  			<span type="button" className="navbar-toggler" onClick={(e) => window.history.back()}>
 	          <img src={iconArrowLeftShort} alt="icon-arrow-left-short"/>
 	        </span>
         </div>

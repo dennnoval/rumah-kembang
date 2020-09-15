@@ -15,12 +15,12 @@ function Categories(props) {
   useEffect(() => {
     let source = axios.CancelToken.source()
 
-    Product.getProductByCategory(source.token, props.match.params.name)
+    Product.getProductByCategory(source.token, props.match.params.categoryName)
       .then(res => { setIsLoaded(true); setCategorizedProducts(res.data) })
       .catch(error => setError(error))
 
     return () => source.cancel()
-  }, [props.match.params.name])
+  }, [props.match.params.categoryName])
 
 	return(
 		<main id="categories">
