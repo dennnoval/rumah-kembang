@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Link } from "react-router-dom"
 import axios from 'axios'
 import Spinner from "react-bootstrap/Spinner"
@@ -8,18 +8,19 @@ import "./Categories.css"
 import Product from "../REST/Product"
 
 function Categories(props) {
-  let [isLoaded, setIsLoaded] = useState(false)
-  let [error, setError] = useState(null)
-  let [categorizedProducts, setCategorizedProducts] = useState({})
+  let [isLoaded, setIsLoaded] = React.useState(false)
+  let [error, setError] = React.useState(null)
+  let [categorizedProducts, setCategorizedProducts] = React.useState({})
 
-  useEffect(() => {
+  React.useEffect(() => {
+    let mounted = true
     let source = axios.CancelToken.source()
 
     Product.getProductByCategory(source.token, props.match.params.categoryName)
-      .then(res => { setIsLoaded(true); setCategorizedProducts(res.data) })
+      .then(res => { if (mounted) {setIsLoaded(true); setCategorizedProducts(res.data)} })
       .catch(error => setError(error))
 
-    return () => source.cancel()
+    return () => {mounted = false; source.cancel()}
   }, [props.match.params.categoryName])
 
 	return(

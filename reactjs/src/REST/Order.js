@@ -10,6 +10,9 @@ const Order = {
 		return axios({
       method: "POST",
       url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Order/createNewOrder',
+      headers: {
+      	"Content-Type": "application/x-www-form-urlencoded"
+      },
       data: data
     })
 	}

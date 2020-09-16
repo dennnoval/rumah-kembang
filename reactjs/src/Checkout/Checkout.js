@@ -8,11 +8,11 @@ function Checkout(props) {
 
 	const submitForm = (e) => {
 		e.preventDefault()
-		const form = e.currentTarget
+		/* const form = e.currentTarget
 		const nama_lengkap = form.elements[0].value
 		const no_hp = form.elements[1].value
 		const alamat_kirim = form.elements[2].value
-		const keterangan = form.elements[3].value
+		const keterangan = form.elements[3].value */
 
 		/* const formData = `Informasi Pemesanan:\n
 			---------------------------------------\n
@@ -25,7 +25,7 @@ function Checkout(props) {
 
 		let wa = `https://wa.me/0895363578741?text=${encodeURIComponent(formData)}` */
 
-		const formData = {
+		/* const formData = {
 			nama_lengkap: nama_lengkap,
 			no_hp: no_hp,
 			alamat_kirim: alamat_kirim,
@@ -33,21 +33,25 @@ function Checkout(props) {
 			referrer: document.referrer
 		}
 
+		let date = new Date()
+
 		const orderData = {
 			id: Math.random(1),
-			tanggal: Date.now(),
-			waktu: Date.now().toLocaleString(),
+			tanggal: date.toLocaleDateString(),
+			waktu: date.toLocaleTimeString(),
 			customer_id: "asdnjjn132jl31jkbkd121",
 			ip_address: "127.0.0.1",
 			order_data: JSON.stringify(formData)
-		}
+		} */
 
 		/* const orderData = {
 			customer_key: document.cookie.split("; ").find(row => row.startsWith("customer_key")).split("=")[1],
 			formData: formData
 		} */
 
-		return Order.orderNow(orderData)
+		const orderData2 = "id=dasdas&tanggal=8/7/2020&waktu=14:33&customer_id=hu67&ip_address=127.0.0.1&order_data={'dsa':'dasdas'}"
+
+		return Order.orderNow(encodeURIComponent(orderData2))
 			.then(res => console.log(res.data))
 			.catch(error => console.log(error))
 	}
@@ -70,7 +74,7 @@ function Checkout(props) {
 						<textarea className="form-control" rows="4" placeholder="Beri keterangan tentang pemesanan..." required></textarea>
 					</div>
 					<div className="form-group">
-						<button type="submit" className="btn btn-secondary btn-block" disabled>Kirim</button>
+						<button type="submit" className="btn btn-secondary btn-block">Kirim</button>
 					</div>
 				</form>
 			</div>
