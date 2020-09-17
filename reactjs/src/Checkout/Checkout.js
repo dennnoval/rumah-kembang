@@ -24,7 +24,12 @@ function Checkout(props) {
 			---------------------------------------
 		`
 
-		let wa = `https://wa.me/0895363578741?text=${encodeURIComponent(formData)}` */
+		let wa = `https://wa.me/0895363578741?text=${encodeURIComponent(formData)}`
+
+		const orderData = {
+			customer_key: document.cookie.split("; ").find(row => row.startsWith("customer_key")).split("=")[1],
+			formData: formData
+		} */
 
 		const formData = {
 			nama_lengkap: nama_lengkap,
@@ -45,17 +50,10 @@ function Checkout(props) {
 			order_data: JSON.stringify(formData)
 		}
 
-		/* const orderData = {
-			customer_key: document.cookie.split("; ").find(row => row.startsWith("customer_key")).split("=")[1],
-			formData: formData
-		} */
-
-		// const orderData2 = "id=dasdas&tanggal=8/7/2020&waktu=14:33&customer_id=hu67&ip_address=127.0.0.1&order_data={'dsa':'dasdas'}"
-
 		return Order.orderNow(orderData)
 			.then(res => setMessage(res.data.result),
-                          error => setMessage(error)
-                        )
+        error => setMessage(error)
+      )
 			.catch(error => console.log(error))
 	}
 
