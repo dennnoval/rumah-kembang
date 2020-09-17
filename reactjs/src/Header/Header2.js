@@ -16,7 +16,7 @@ function Header2(props) {
 		title = location.pathname.split("/")[2]
 
 	return(
-		<header id="header2">
+		<header id="header2" className={(url1 === "superuser") ? "d-none":""}>
       <nav className="navbar fixed-top bg-light border-bottom p-0">
       	<div className="col-2 justify-content-start">
 	  			<span type="button" className="navbar-toggler" onClick={(e) => window.history.back()}>

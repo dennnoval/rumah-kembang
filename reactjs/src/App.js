@@ -9,6 +9,7 @@ import Categories from "./Categories/Categories"
 import Tags from "./Tags/Tags"
 import Detail from "./Detail/Detail"
 import Checkout from "./Checkout/Checkout"
+import Admin from "./Admin/Admin"
 
 function App(props) {
 	let [active, setActive] = React.useState(false)
@@ -29,6 +30,7 @@ function App(props) {
 
   return (
     <>
+      <Route exact path="/superuser" component={Admin}/>
     	<Switch>
         <Route exact path="/">
           <Header toggleWrapper={toggleWrapper}/>

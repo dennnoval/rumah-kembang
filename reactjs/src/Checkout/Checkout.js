@@ -1,11 +1,36 @@
 import React from "react"
+import Spinner from "react-bootstrap/Spinner"
+import Modal from "react-bootstrap/Modal"
+import { Link } from 'react-router-dom'
 
 import "./Checkout.css"
 
 import Order from "../REST/Order"
 
+function successModal(show, message) {
+	return(
+		<Modal show={show} onHide={() => null} aria-labelledby="contained-modal-title-vcenter" centered>
+			<Modal.Body>
+				{(message === "order-success")
+					? <div className="text-center">
+							<h5>Terima kasih, pesanan anda telah kami terima</h5>
+							<small>Order ID: </small>
+							<h3>RKORD000001</h3>
+							<Link to="/myorder/CookieID"><small>Cek status</small></Link>
+						</div>
+					: <>
+							<p>Maaf, proses pemesanan gagal</p>
+							<p>Silahkan pesan beberapa saat lagi</p>
+						</>
+				}
+			</Modal.Body>
+		</Modal>	
+	)
+}
+
 function Checkout(props) {
-        let [message, setMessage] = React.useState(null)
+  let [message, setMessage] = React.useState(null)
+  let [isSubmit, setIsSubmit] = React.useState(false)
 
 	const submitForm = (e) => {
 		e.preventDefault()
@@ -14,6 +39,7 @@ function Checkout(props) {
 		const no_hp = form.elements[1].value
 		const alamat_kirim = form.elements[2].value
 		const keterangan = form.elements[3].value
+		const submitBtn = form.elements[4]
 
 		/* const formData = `Informasi Pemesanan:\n
 			---------------------------------------\n
@@ -47,8 +73,10 @@ function Checkout(props) {
 			waktu: date.toLocaleTimeString(),
 			customer_id: Math.random(2),
 			ip_address: "127.0.0.1",
-			order_data: JSON.stringify(formData)
+			order_data: JSON.stringify(formData).toString()
 		}
+
+		setIsSubmit(true)
 
 		return Order.orderNow(orderData)
 			.then(res => setMessage(res.data.result),
@@ -75,12 +103,19 @@ function Checkout(props) {
 						<textarea className="form-control" rows="4" placeholder="Beri keterangan tentang pemesanan..." required></textarea>
 					</div>
 					<div className="form-group">
-						<button type="submit" className="btn btn-secondary btn-block">Kirim</button>
+						<button type="submit" className="btn btn-secondary btn-block" disabled={(!isSubmit) ? false : true}>
+							{(!isSubmit) ? "Kirim" 
+								: (message === null) 
+								? <Spinner aria-hidden="true" className="submit-spinner" animation="border" role="status" variant="warning"></Spinner>
+								: "Terkirim"
+							}
+						</button>
 					</div>
 				</form>
-                                <p className={(message === "order-success") ? "" : "d-none"}>
-                                  {(message === "order-success") ? "Pemesanan Berhasil" : "Pemesanan gagal"}
-                                </p>
+        {(message !== null)
+        	? successModal(true, message)
+        	: <></>
+      	}
 			</div>
 		</main>	
 	)
