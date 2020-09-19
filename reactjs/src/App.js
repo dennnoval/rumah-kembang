@@ -26,7 +26,7 @@ function App(props) {
 	        cancelToken: source.token
 	      })
 	      .then(res => {
-	        document.cookie = `customer_id=${encodeURIComponent(res.data.result.customerId)}; path=/; max-age=3600; samesite=none; secure`
+	        document.cookie = `customer_id=${encodeURIComponent(res.data.result.customerId)}; path=/; max-age=3600`
 	      })
 	      .catch(err => console.log(err))
 	      console.log(document.cookie)
