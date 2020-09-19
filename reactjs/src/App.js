@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route } from "react-router-dom"
+import axios from 'axios'
 
 import Wrapper from "./Wrapper/Wrapper"
 import Welcome from "./Welcome/Welcome"
@@ -15,6 +16,23 @@ function App(props) {
 	let [active, setActive] = React.useState(false)
 	let [classes, setClasses] = React.useState("left")
   let [ids, setIds] = React.useState("")
+
+  React.useEffect(() => {
+    var source = axios.CancelToken.source()
+    if (document.cookie === "") {
+	    axios({
+	        method: "GET",
+	        url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Customer/setCustomerCookie',
+	        cancelToken: source.token
+	      })
+	      .then(res => {
+	        document.cookie = `customer_id=${encodeURIComponent(res.data.result.customerId)}; path=/; max-age=3600; samesite=none; secure`
+	      })
+	      .catch(err => console.log(err))
+	      console.log(document.cookie)
+    }
+    return () => source.cancel()
+  })
 
 	const toggleWrapper = (e) => {
 		e.preventDefault()

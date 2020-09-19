@@ -7,7 +7,7 @@ import "./Checkout.css"
 
 import Order from "../REST/Order"
 
-function successModal(show, result) {
+function successModal(show, result, cookieId) {
 	return(
 		<Modal show={show} onHide={() => null} aria-labelledby="contained-modal-title-vcenter" centered>
 			<Modal.Body>
@@ -15,8 +15,8 @@ function successModal(show, result) {
 					? <div className="text-center">
 							<h5>Terima kasih, pesanan anda telah kami terima</h5>
 							<small>Order ID: </small>
-							<h3>{result.orderId}</h3>
-							<Link to="/myorder/CookieID"><small>Cek status</small></Link>
+							<h3 className="text-break">{result.orderId}</h3>
+							<Link to={"/myorder/" + cookieId}><small>Cek status</small></Link>
 						</div>
 					: <>
 							<p>Maaf, proses pemesanan gagal</p>
@@ -31,6 +31,7 @@ function successModal(show, result) {
 function Checkout(props) {
   let [result, setResult] = React.useState(null)
   let [isSubmit, setIsSubmit] = React.useState(false)
+  let [customerId, setCustomerId] = React.useState(document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1])
 
 	const submitForm = (e) => {
 		e.preventDefault()
@@ -54,6 +55,7 @@ function Checkout(props) {
 		let date = new Date()
 
 		const orderData = {
+			customer_id: customerId,
 			order_data: JSON.stringify(formData).toString()
 		}
 
@@ -92,7 +94,7 @@ function Checkout(props) {
 					</div>
 				</form>
         {(result !== null)
-        	? successModal(true, result)
+        	? successModal(true, result, customerId)
         	: <></>
       	}
 			</div>
