@@ -29,16 +29,25 @@ function App(props) {
 		setActive(!active)
 	}
 
+  let [customerId, setCustomerId] = React.useState(null)
+
   React.useEffect(() => {
     let source = axios.CancelToken.source()
 
-    axios({
-        method: "GET",
-        url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Customer/setCustomerCookie',
-        cancelToken: source.token
-      })
-      .then(res => console.log(res.status))
-      .catch(err => console.log(err))
+    if (customerId === null || customerId === undefined) {
+      axios({
+          method: "GET",
+          url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Customer/setCustomerCookie',
+          cancelToken: source.token
+        })
+        .then(res => {
+          if (res.data.result.customerId !== undefined) {
+            setCustomerId(res.data.result.customerId)
+            console.log(res.status)
+          }
+        })
+        .catch(err => console.log(err))
+    }
 
     return () => source.cancel()
   })
