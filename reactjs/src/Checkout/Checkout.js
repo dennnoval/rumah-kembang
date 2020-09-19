@@ -7,7 +7,8 @@ import "./Checkout.css"
 
 import Order from "../REST/Order"
 
-function successModal(show, result, cookieId) {
+function successModal(show, result) {
+	let cookieId = encodeURIComponent(document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1])
 	return(
 		<Modal show={show} onHide={() => null} aria-labelledby="contained-modal-title-vcenter" centered>
 			<Modal.Body>
@@ -31,7 +32,6 @@ function successModal(show, result, cookieId) {
 function Checkout(props) {
   let [result, setResult] = React.useState(null)
   let [isSubmit, setIsSubmit] = React.useState(false)
-  let [customerId, setCustomerId] = React.useState()
 
 	const submitForm = (e) => {
 		e.preventDefault()
@@ -54,8 +54,9 @@ function Checkout(props) {
 
 		let date = new Date()
 
+		let customerId = ""
 		if (document.cookie !== "")
-			setCustomerId(document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1])
+			customerId = document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1]
 
 		const orderData = {
 			customer_id: customerId,
@@ -97,7 +98,7 @@ function Checkout(props) {
 					</div>
 				</form>
         {(result !== null)
-        	? successModal(true, result, customerId)
+        	? successModal(true, result)
         	: <></>
       	}
 			</div>
