@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route } from "react-router-dom"
+import axios from 'axios'
 
 import Wrapper from "./Wrapper/Wrapper"
 import Welcome from "./Welcome/Welcome"
@@ -27,6 +28,20 @@ function App(props) {
 		}
 		setActive(!active)
 	}
+
+  React.useEffect(() => {
+    let source = axios.CancelToken.source()
+
+    axios({
+        method: "GET",
+        url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Customer/setCustomerCookie',
+        cancelToken: source.token
+      })
+      .then(res => console.log(res.status))
+      .catch(err => console.log(err))
+
+    return () => source.cancel()
+  })
 
   return (
     <>

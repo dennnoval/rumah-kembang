@@ -7,15 +7,15 @@ import "./Checkout.css"
 
 import Order from "../REST/Order"
 
-function successModal(show, message) {
+function successModal(show, result) {
 	return(
 		<Modal show={show} onHide={() => null} aria-labelledby="contained-modal-title-vcenter" centered>
 			<Modal.Body>
-				{(message === "order-success")
+				{(result.message === "order-success")
 					? <div className="text-center">
 							<h5>Terima kasih, pesanan anda telah kami terima</h5>
 							<small>Order ID: </small>
-							<h3>RKORD000001</h3>
+							<h3>{result.orderId}</h3>
 							<Link to="/myorder/CookieID"><small>Cek status</small></Link>
 						</div>
 					: <>
@@ -29,7 +29,7 @@ function successModal(show, message) {
 }
 
 function Checkout(props) {
-  let [message, setMessage] = React.useState(null)
+  let [result, setResult] = React.useState(null)
   let [isSubmit, setIsSubmit] = React.useState(false)
 
 	const submitForm = (e) => {
@@ -68,9 +68,8 @@ function Checkout(props) {
 		let date = new Date()
 
 		const orderData = {
-			id: Math.random(1),
-			tanggal: date.toLocaleDateString(),
-			waktu: date.toLocaleTimeString(),
+			tanggal: date.toLocaleDateString("id-ID"),
+			waktu: date.toLocaleTimeString("id-ID"),
 			customer_id: Math.random(2),
 			ip_address: "127.0.0.1",
 			order_data: JSON.stringify(formData).toString()
@@ -79,8 +78,8 @@ function Checkout(props) {
 		setIsSubmit(true)
 
 		return Order.orderNow(orderData)
-			.then(res => setMessage(res.data.result),
-        error => setMessage(error)
+			.then(res => setResult(res.data.result),
+        error => setResult(error)
       )
 			.catch(error => console.log(error))
 	}
@@ -105,15 +104,15 @@ function Checkout(props) {
 					<div className="form-group">
 						<button type="submit" className="btn btn-secondary btn-block" disabled={(!isSubmit) ? false : true}>
 							{(!isSubmit) ? "Kirim" 
-								: (message === null) 
+								: (result === null) 
 								? <Spinner aria-hidden="true" className="submit-spinner" animation="border" role="status" variant="warning"></Spinner>
 								: "Terkirim"
 							}
 						</button>
 					</div>
 				</form>
-        {(message !== null)
-        	? successModal(true, message)
+        {(result !== null)
+        	? successModal(true, result)
         	: <></>
       	}
 			</div>
