@@ -31,7 +31,7 @@ function successModal(show, result, cookieId) {
 function Checkout(props) {
   let [result, setResult] = React.useState(null)
   let [isSubmit, setIsSubmit] = React.useState(false)
-  let [customerId, setCustomerId] = React.useState(document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1])
+  let [customerId, setCustomerId] = React.useState()
 
 	const submitForm = (e) => {
 		e.preventDefault()
@@ -53,6 +53,9 @@ function Checkout(props) {
 		}
 
 		let date = new Date()
+
+		if (document.cookie !== "")
+			setCustomerId(document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1])
 
 		const orderData = {
 			customer_id: customerId,
