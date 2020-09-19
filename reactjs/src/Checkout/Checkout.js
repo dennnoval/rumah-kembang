@@ -34,28 +34,14 @@ function Checkout(props) {
 
 	const submitForm = (e) => {
 		e.preventDefault()
+		setIsSubmit(true)
+		
 		const form = e.currentTarget
 		const nama_lengkap = form.elements[0].value
 		const no_hp = form.elements[1].value
 		const alamat_kirim = form.elements[2].value
 		const keterangan = form.elements[3].value
 		const submitBtn = form.elements[4]
-
-		/* const formData = `Informasi Pemesanan:\n
-			---------------------------------------\n
-			Nama: ${nama_lengkap}\n
-			No.HP: ${no_hp}\n
-			Alamat kirim: ${alamat_kirim}\n
-			Keterangan: ${keterangan}
-			---------------------------------------
-		`
-
-		let wa = `https://wa.me/0895363578741?text=${encodeURIComponent(formData)}`
-
-		const orderData = {
-			customer_key: document.cookie.split("; ").find(row => row.startsWith("customer_key")).split("=")[1],
-			formData: formData
-		} */
 
 		const formData = {
 			nama_lengkap: nama_lengkap,
@@ -68,14 +54,8 @@ function Checkout(props) {
 		let date = new Date()
 
 		const orderData = {
-			tanggal: date.toLocaleDateString("id-ID"),
-			waktu: date.toLocaleTimeString("id-ID"),
-			customer_id: Math.random(2),
-			ip_address: "127.0.0.1",
 			order_data: JSON.stringify(formData).toString()
 		}
-
-		setIsSubmit(true)
 
 		return Order.orderNow(orderData)
 			.then(res => setResult(res.data.result),

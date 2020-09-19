@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route } from "react-router-dom"
 import axios from 'axios'
+import Cookies from "js-cookie"
 
 import Wrapper from "./Wrapper/Wrapper"
 import Welcome from "./Welcome/Welcome"
@@ -28,26 +29,29 @@ function App(props) {
 		}
 		setActive(!active)
 	}
-
-  let [customerId, setCustomerId] = React.useState(null)
-
+  
   React.useEffect(() => {
     let source = axios.CancelToken.source()
 
-    if (customerId === null || customerId === undefined) {
+    if (document.cookie === null || document.cookie === undefined || document.cookie === "") {
       axios({
           method: "GET",
           url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Customer/setCustomerCookie',
+          withCredentials: true,
           cancelToken: source.token
         })
         .then(res => {
+          console.log(res)
           if (res.data.result.customerId !== undefined) {
-            setCustomerId(res.data.result.customerId)
+            document.cookie = res.data.result.customerId
             console.log(res.status)
+            console.log(document.cookie)
           }
         })
         .catch(err => console.log(err))
     }
+    console.log(document.cookie)
+    console.log(Cookies.get("customer_id"))
 
     return () => source.cancel()
   })
