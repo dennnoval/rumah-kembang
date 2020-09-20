@@ -3,6 +3,7 @@ import React from 'react'
 import "./Wrapper.css"
 
 import Search from "../Search/Search"
+import Cart from "../Cart/Cart"
 
 function Wrapper(props) {
 	let ids = " " + props.ids
@@ -10,10 +11,11 @@ function Wrapper(props) {
 	let active = props.active
 
 	let content = function() {
+		console.log(ids)
 		return(
 			(ids === " search-button top-side")
 			? <Search active={active}/>
-			: <p>---- Keranjang kosong ----</p>
+			: <Cart active={active} ids={ids}/>
 		)
 	}
 

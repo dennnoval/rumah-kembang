@@ -9,69 +9,59 @@ import iconCartPlus from "../resources/icon-cart-plus.svg"
 
 import Product from "../REST/Product"
 
-const priceEl = (...args) => {
-  if (args[0]) console.log(args[0])
-  else if (!args[1]) return(<div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>)
-  else if (args[2].result === undefined) return(<span>Error! Couldnt fetch data</span>)
-  else return(
-        <p className="h5">
-          {/* <span className="border border-danger rounded text-danger px-1"><small>15% off</small></span> */}
-          <span className="ml-2 text-sm font-weight-bold">
-            {/* <small className="mr-2"><del>Rp 345.678</del></small> */}
-            <span>{
-              "Rp " + new Intl.NumberFormat("id-ID").format(args[2].result[0].harga)
-              }</span>
-          </span>
-        </p>  
-      )
-}
-
-const productImg = (...args) => {
-  if (args[0]) console.log(args[0])
-  else if (!args[1]) return <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
-  else if (args[2].result === undefined) return <span>Error! Couldnt fetch data</span>
-  else return (<img src={args[2].result[0].foto} alt="..." className="w-75"/>)
-}
-
-const productID = (...args) => {
-  if (args[0]) console.log(args[0])
-  else if (!args[1]) return <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
-  else if (args[2].result === undefined) return <span>Error! Couldnt fetch data</span>
-  else return args[2].result[0].kode
-}
-
-const productSize = (...args) => {
-  if (args[0]) console.log(args[0])
-  else if (!args[1]) return <tr className="text-center"><td><Spinner role="loading" animation="grow" variant="secondary"/></td></tr>
-  else if (args[2].result === undefined) return <tr><td>"Error! Couldnt fetch data"</td></tr>
-  else if (args[2].result[0].kategori === "bunga-papan")
-    return <tr>
-            <th scope="row"><small><b>Ukuran (PxL)</b></small></th>
-            <td>125cm x 100cm</td>
-          </tr>
-  else return <tr></tr>       
-}
-
-const productCategory = (...args) => {
-  if (args[0]) console.log(args[0])
-  else if (!args[1]) return <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
-  else if (args[2].result === undefined) return <span>Error! Couldnt fetch data</span>
-  else 
-    return <Link key={args[2].result[0].kategori + Math.random(1)} className="text-link text-capitalize" to={"/kategori/" + args[2].result[0].kategori}>
-            {args[2].result[0].kategori.replace("-", " ")}
-          </Link>
-}
-
-const productTag = (...args) => {
+const productDescription = (...args) => {
   if (args[0]) console.log(args[0])
   else if (!args[1]) return <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
   else if (args[2].result === undefined) return <span>Error! Couldnt fetch data</span>
   else
-    return args[2].result[0].tags.split(",").map((tag, index) => (
-      <Link key={tag + Math.random(1)} className="text-link" to={"/tag/" + tag.trim()}>
-        {"#" + tag.trim() + " "}
-      </Link>
-    ))
+    switch (args[3]) {
+      case "product-price": 
+        return(
+          <p className="h5">
+            {/* <span className="border border-danger rounded text-danger px-1"><small>15% off</small></span> */}
+            <span className="ml-2 text-sm font-weight-bold">
+              {/* <small className="mr-2"><del>Rp 345.678</del></small> */}
+              <span>{
+                "Rp " + new Intl.NumberFormat("id-ID").format(args[2].result[0].harga)
+                }</span>
+            </span>
+          </p>
+        )
+        break
+      case "product-img": 
+        return (<img src={args[2].result[0].foto} alt="..." className="w-75"/>)
+        break
+      case "product-id": 
+        return args[2].result[0].kode
+        break
+      case "product-size": 
+        if (args[2].result[0].kategori === "bunga-papan")
+          return (
+            <tr>
+              <th scope="row"><small><b>Ukuran (PxL)</b></small></th>
+              <td>125cm x 100cm</td>
+            </tr>
+          )
+        else return <tr></tr>
+        break
+      case "product-category": 
+        return(
+          <Link className="text-link text-capitalize" to={"/kategori/" + args[2].result[0].kategori}>
+            {args[2].result[0].kategori.replace("-", " ")}
+          </Link>
+        )
+        break
+      case "product-tags": 
+        return (
+          args[2].result[0].tags.split(",").map((tag, index) => (
+            <Link key={tag + Math.random(1)} className="text-link" to={"/tag/" + tag.trim()}>
+              {"#" + tag.trim() + " "}
+            </Link>
+          ))
+        )
+        break
+      default : break
+    }
 }
 
 function Detail(props) {
@@ -92,11 +82,18 @@ function Detail(props) {
     return () => {mounted = false; source.cancel()}
   }, [props.match.params.kode])
 
+  const addToCart = (productId) => {
+    if (sessionStorage.getItem(productId) === null)
+      sessionStorage.setItem(productId, 1)
+    else
+      sessionStorage.setItem(productId, parseInt(sessionStorage.getItem(productId)) + 1)
+  }
+
 	return(
 		<main id="detail">
       <div className="container p-0">
   			<div id="product-img" className="text-center">
-          {productImg(error, isLoaded, productByKode)}
+          {productDescription(error, isLoaded, productByKode, "product-img")}
         </div>
       </div>
       <div className="container mt-2 pt-2 pb-5 px-2 border bg-light">
@@ -109,25 +106,25 @@ function Detail(props) {
             </div>
           </div> */}
           <div className="mt-2 mb-3">
-            {priceEl(error, isLoaded, productByKode)}
+            {productDescription(error, isLoaded, productByKode, "product-price")}
           </div>
           <table className="table table-sm table-bordered">
             <tbody>
               <tr>
                 <th scope="row"><small><b>Kode Produk</b></small></th>
-                <td>{productID(error, isLoaded, productByKode)}</td>
+                <td>{productDescription(error, isLoaded, productByKode, "product-id")}</td>
               </tr>
-              {productSize(error, isLoaded, productByKode)}
+              {productDescription(error, isLoaded, productByKode, "product-size")}
               <tr>
                 <th scope="row"><small><b>Kategori</b></small></th>
                 <td>
-                  {productCategory(error, isLoaded, productByKode)}
+                  {productDescription(error, isLoaded, productByKode, "product-category")}
                 </td>
               </tr>
               <tr>
                 <th scope="row"><small><b>Tags</b></small></th>
                 <td>
-                  {productTag(error, isLoaded, productByKode)}
+                  {productDescription(error, isLoaded, productByKode, "product-tags")}
                 </td>
               </tr>
             </tbody>
@@ -139,7 +136,7 @@ function Detail(props) {
           <Link to="/checkout" id="order-now" type="button" className="btn btn-outline-success col mr-1">
             Pesan
           </Link>
-          <span id="add-to-cart" type="button" className="btn btn-warning col-2 btn-block">
+          <span id="add-to-cart" type="button" onClick={(e) => addToCart(props.match.params.kode)} className="btn btn-warning col-2 btn-block">
             <img src={iconCartPlus} alt="icon-cart-plus"/>
           </span>
         </div>
