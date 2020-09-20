@@ -42,17 +42,20 @@ function Checkout(props) {
 		const no_hp = form.elements[1].value
 		const alamat_kirim = form.elements[2].value
 		const keterangan = form.elements[3].value
-		const submitBtn = form.elements[4]
+
+		var carts = {}
+		for (let i = 0; i < sessionStorage.length; i++) {
+			carts[`${sessionStorage.key(i)}`] = sessionStorage.getItem(sessionStorage.key(i))
+		}
 
 		const formData = {
 			nama_lengkap: nama_lengkap,
 			no_hp: no_hp,
 			alamat_kirim: alamat_kirim,
 			keterangan: keterangan,
-			referrer: document.referrer
+			referrer: document.referrer,
+			cartData: carts
 		}
-
-		let date = new Date()
 
 		let customerId = ""
 		if (document.cookie !== "")

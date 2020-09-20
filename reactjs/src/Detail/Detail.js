@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
 import axios from "axios"
 import Spinner from "react-bootstrap/Spinner"
+import Toast from "react-bootstrap/Toast"
 
 import "./Detail.css"
 
@@ -27,13 +28,10 @@ const productDescription = (...args) => {
             </span>
           </p>
         )
-        break
       case "product-img": 
         return (<img src={args[2].result[0].foto} alt="..." className="w-75"/>)
-        break
       case "product-id": 
         return args[2].result[0].kode
-        break
       case "product-size": 
         if (args[2].result[0].kategori === "bunga-papan")
           return (
@@ -43,14 +41,12 @@ const productDescription = (...args) => {
             </tr>
           )
         else return <tr></tr>
-        break
       case "product-category": 
         return(
           <Link className="text-link text-capitalize" to={"/kategori/" + args[2].result[0].kategori}>
             {args[2].result[0].kategori.replace("-", " ")}
           </Link>
         )
-        break
       case "product-tags": 
         return (
           args[2].result[0].tags.split(",").map((tag, index) => (
@@ -59,7 +55,6 @@ const productDescription = (...args) => {
             </Link>
           ))
         )
-        break
       default : break
     }
 }
@@ -68,6 +63,7 @@ function Detail(props) {
   let [isLoaded, setIsLoaded] = useState(false)
   let [error, setError] = useState(null)
   let [productByKode, setProductByKode] = useState({})
+  let [showToast, setShowToast] = React.useState(false)
 
   useEffect(function() {
     let mounted = true
@@ -87,6 +83,7 @@ function Detail(props) {
       sessionStorage.setItem(productId, 1)
     else
       sessionStorage.setItem(productId, parseInt(sessionStorage.getItem(productId)) + 1)
+    setShowToast(true)
   }
 
 	return(
@@ -131,6 +128,9 @@ function Detail(props) {
           </table>
         </div>
     	</div>
+      <Toast show={showToast} autohide delay={3000} onClose={() => setShowToast(false)} style={{"boxShadow": "none"}}>
+        <Toast.Body>{`Produk ${props.match.params.kode} ditambahkan ke dalam keranjang`}</Toast.Body>
+      </Toast>
       <div className="container mt-2 border bg-light fixed-bottom">
         <div className="row p-2">
           <Link to="/checkout" id="order-now" type="button" className="btn btn-outline-success col mr-1">
