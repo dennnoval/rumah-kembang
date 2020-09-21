@@ -27,7 +27,7 @@ function orderList(data, detailOnClick) {
 						<td>{new Date(order.tanggal).toLocaleDateString()}</td>
 						<td>{order.waktu}</td>
 						<td>
-							<button className="btn btn-link btn-sm" onClick={detailOnClick}>Detail</button>
+							<button className="btn btn-link btn-sm" dataOrder={order} onClick={detailOnClick}>Detail</button>
 						</td>
 					</tr>
     		))}
@@ -41,6 +41,7 @@ function Admin(props) {
   let [error, setError] = React.useState(null)
   let [data, setData] = React.useState([])
   let [showModal, setShowModal] = React.useState(false)
+  let [modalData, setModalData] = React.useState(null)
 
 	React.useEffect(() => {
 		let source = axios.CancelToken.source()
@@ -55,26 +56,36 @@ function Admin(props) {
 		return () => source.cancel()
 	})
 
+	const setModalContent = (e) => {
+		var button = e.relatedTarget
+		setModalData(button.data("order"))
+		console.log(button.data("order"))
+	}
+
 	return(
 		<main id="admin">
   		<div className="container my-2 py-2 bg-light px-2">
 				{orderList(data, (e) => setShowModal(true))}
 			</div>
 
-			<Modal show={showModal} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
+			<Modal show={showModal} onShow={setModalContent} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
 				<Modal.Header closeButton>
 					<h5 className="my-0"><b>123456</b></h5>
 				</Modal.Header>
 				<Modal.Body>
-					<p>Order ID : 123456</p>
-					<p>Tanggal : </p>
-					<p>Waktu : </p>
-					<p>Customer ID : </p>
-					<p>Nama : </p>
-					<p>No. Hp : </p>
-					<p>Alamat Kirim : </p>
-					<p>Katerangan : </p>
-					<p>Barang : </p>
+					{(modalData === null) ? ""
+						: <>
+								<p>Order ID : {modalData.id}</p>
+								<p>Tanggal : {modalData.tanggal}</p>
+								<p>Waktu : {modalData.waktu}</p>
+								<p>Customer ID : {modalData.customer_id}</p>
+								<p>Nama : </p>
+								<p>No. Hp : </p>
+								<p>Alamat Kirim : </p>
+								<p>Katerangan : </p>
+								<p>Barang : </p>
+							</>
+					}
 				</Modal.Body>
 			</Modal>	
 		</main>	
