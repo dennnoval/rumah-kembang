@@ -20,7 +20,8 @@ function Header2(props) {
 			(url1 === "kategori") 
 				? (<span className="navbar-brand text-capitalize"><b>{title.replace("-", " ")}</b></span>)
 				: (url1 === "myorder") ? (<span className="navbar-brand"><b>My Order</b></span>)
-				: (<span className="navbar-brand"><b>{"#" + title.replace("-", " ")}</b></span>)
+				: (url1 === "superuser") ? (<span className="navbar-brand"><b>Admin</b></span>)
+				:	(<span className="navbar-brand"><b>{"#" + title.replace("-", " ")}</b></span>)
   	)
 	}
 

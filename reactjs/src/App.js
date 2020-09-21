@@ -11,6 +11,7 @@ import Tags from "./Tags/Tags"
 import Detail from "./Detail/Detail"
 import Checkout from "./Checkout/Checkout"
 import Admin from "./Admin/Admin"
+import Customer from "./Customer/Customer"
 
 function App(props) {
 	let [active, setActive] = React.useState(false)
@@ -56,6 +57,7 @@ function App(props) {
         </Route>
         <Route path="/:type">
           <Header2 toggleWrapper={toggleWrapper}/>
+          <Route exact path="/myorder/:customerId" component={Customer}/>
           <Route exact path="/checkout" component={Checkout}/>
           <Route exact path="/kategori/:categoryName" component={Categories}/>
           <Route exact path="/tag/:tagName" component={Tags}/>

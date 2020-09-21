@@ -1,15 +1,15 @@
 import React from 'react'
-import { Link } from "react-router-dom"
-import axios from 'axios'
 import Modal from "react-bootstrap/Modal"
+import Spinner from "react-bootstrap/Spinner"
+import axios from 'axios'
 
-import "./Admin.css"
+import "./Customer.css"
 
-import AdminAPI from "../REST/Admin"
+import CustomerAPI from "../REST/Customer"
 
-function orderList(data, showModal) {
+function orderList(loading, data, showModal) {
 	return(
-		<table className="table table-responsive">
+		<table className="table table-sm table-bordered table-responsive">
 			<thead>
 				<tr>
 					<th>#</th>
@@ -20,17 +20,19 @@ function orderList(data, showModal) {
 				</tr>
 			</thead>
       <tbody>
-      	{data.map((order, index) => (
-      		<tr key={Math.random(1)}>
-						<td className="align-middle">{index + 1}</td>
-						<td className="align-middle"><b>{order.id}</b></td>
-						<td className="align-middle">{new Date(order.tanggal).toLocaleDateString()}</td>
-						<td className="align-middle">{order.waktu}</td>
-						<td className="align-middle">
-							<button className="btn btn-link btn-sm" orderData={JSON.stringify(order)} dataTarget="#order-detail" onClick={showModal}>Detail</button>
-						</td>
-					</tr>
-    		))}
+      	{(!loading) ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
+      		: data.map((order, index) => (
+		      		<tr key={Math.random(1)}>
+								<td>{index + 1}</td>
+								<td>{order.id}</td>
+								<td>{new Date(order.tanggal).toLocaleDateString()}</td>
+								<td>{order.waktu}</td>
+								<td>
+									<button className="btn btn-link btn-sm" dataOrder={order} onClick={showModal}>Detail</button>
+								</td>
+							</tr>
+    				))
+    		}
       </tbody>
     </table>	
 	)
@@ -81,22 +83,24 @@ function modalBody(modalData) {
 	)
 }
 
-function Admin(props) {
+function Customer(props) {
+	let [isLoaded, setIsLoaded] = React.useState(false)
   let [data, setData] = React.useState([])
   let [showModal, setShowModal] = React.useState(false)
   let [modalData, setModalData] = React.useState(null)
 
-	React.useEffect(() => {
+  React.useEffect(() => {
 		let source = axios.CancelToken.source()
 
-		AdminAPI.getAllOrders(source.token)
+		CustomerAPI.getCustomerOrders(source.token, props.match.params.customerId)
 			.then(res => {
+				setIsLoaded(true)
         setData(res.data.result)
 			})
 			.catch(error => console.log(error))
 
 		return () => source.cancel()
-	})
+	}, [props.match.params.customerId])
 
 	const setModalContent = (e) => {
 		const button = e.currentTarget
@@ -105,9 +109,9 @@ function Admin(props) {
 	}
 
 	return(
-		<main id="admin">
+		<main id="customer-my-order">
   		<div className="container my-2 py-2 bg-light px-2">
-				{orderList(data, (e) => {setShowModal(true); setModalContent(e)})}
+				{orderList(isLoaded, data, (e) => {setShowModal(true); setModalContent(e)})}
 			</div>
 
 			<Modal id="order-detail" show={showModal} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -120,8 +124,8 @@ function Admin(props) {
 					}
 				</Modal.Body>
 			</Modal>	
-		</main>	
+		</main>
 	)
 }
 
-export default Admin
+export default Customer
