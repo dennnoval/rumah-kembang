@@ -68,7 +68,7 @@ function Admin(props) {
 				{orderList(data, (e) => setShowModal(true))}
 			</div>
 
-			<Modal show={showModal} onShow={setModalContent} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
+			<Modal show={showModal} onShow={e => setModalContent(e)} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
 				<Modal.Header closeButton>
 					<h5 className="my-0"><b>123456</b></h5>
 				</Modal.Header>
