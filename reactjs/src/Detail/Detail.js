@@ -128,7 +128,7 @@ function Detail(props) {
           </table>
         </div>
     	</div>
-      <Toast show={showToast} autohide delay={3000} onClose={() => setShowToast(false)} style={{"boxShadow": "none"}}>
+      <Toast id="cart-added-toast" className="mx-2 fixed-bottom" show={showToast} autohide delay={3000} onClose={() => setShowToast(false)} style={{"boxShadow": "none"}}>
         <Toast.Body>{`Produk ${props.match.params.kode} ditambahkan ke dalam keranjang`}</Toast.Body>
       </Toast>
       <div className="container mt-2 border bg-light fixed-bottom">
