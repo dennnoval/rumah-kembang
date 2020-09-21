@@ -15,6 +15,15 @@ function Header2(props) {
 	if (location.pathname.split("/")[2] !== undefined)
 		title = location.pathname.split("/")[2]
 
+	const setTitle = (url1, title) => {
+		return (
+			(url1 === "kategori") 
+				? (<span className="navbar-brand text-capitalize"><b>{title.replace("-", " ")}</b></span>)
+				: (url1 === "myorder") ? (<span className="navbar-brand"><b>My Order</b></span>)
+				: (<span className="navbar-brand"><b>{"#" + title.replace("-", " ")}</b></span>)
+  	)
+	}
+
 	return(
 		<header id="header2" className={(url1 === "superuser") ? "d-none":""}>
       <nav className="navbar fixed-top bg-light border-bottom p-0">
@@ -24,10 +33,7 @@ function Header2(props) {
 	        </span>
         </div>
       	<div className={"col pl-1 pr-0 justify-content-start"}>
-      		{(url1 === "kategori") 
-      			? (<span className="navbar-brand text-capitalize"><b>{title.replace("-", " ")}</b></span>)
-	    			: (<span className="navbar-brand"><b>{"#" + title.replace("-", " ")}</b></span>)
-	      	}
+      		{setTitle(url1, title)}
 				</div>
 				<div className="row col mr-2 justify-content-end">
 	  			<div className="col-4 mr-1">

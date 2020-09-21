@@ -35,7 +35,9 @@ function Cart(props) {
 									<td className="col-3">
 										<input type="number" value={cartStorage[key]} onChange={e => changeItemCount(e, key)} className="form-control form-control-sm"/>
 									</td>
-									<td className="navbar-toggler text-danger align-middle"><span onClick={e => sessionStorage.removeItem(key)}>x</span></td>
+									<td className="align-middle p-0">
+										<span className="navbar-toggler text-danger" type="button" onClick={e => sessionStorage.removeItem(key)}>x</span>
+									</td>
 								</tr>
 							))}
 						</tbody>

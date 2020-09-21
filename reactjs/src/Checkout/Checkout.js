@@ -18,6 +18,7 @@ function successModal(show, result) {
 							<small>Order ID: </small>
 							<h3 className="text-break">{result.orderId}</h3>
 							<Link to={"/myorder/" + cookieId}><small>Cek status</small></Link>
+							{sessionStorage.clear()}
 						</div>
 					: <>
 							<p>Maaf, proses pemesanan gagal</p>
@@ -54,7 +55,7 @@ function Checkout(props) {
 			alamat_kirim: alamat_kirim,
 			keterangan: keterangan,
 			referrer: document.referrer,
-			cartData: carts
+			cart_data: carts
 		}
 
 		let customerId = ""
