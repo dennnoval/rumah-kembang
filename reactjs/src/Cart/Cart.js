@@ -31,8 +31,8 @@ function Cart(props) {
 						<tbody>
 							{Object.keys(cartStorage).map((key, ind) => (
 								<tr key={key}>
-									<td className="col-9 align-middle"><Link to={"/produk/" + key}>{key}</Link></td>
-									<td className="col-3">
+									<td className="col-8 align-middle"><Link to={"/produk/" + key}>{key}</Link></td>
+									<td className="col-4">
 										<input type="number" value={cartStorage[key]} onChange={e => changeItemCount(e, key)} className="form-control form-control-sm"/>
 									</td>
 									<td className="align-middle p-0">

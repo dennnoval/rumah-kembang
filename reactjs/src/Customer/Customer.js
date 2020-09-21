@@ -28,7 +28,7 @@ function orderList(loading, data, showModal) {
 								<td>{new Date(order.tanggal).toLocaleDateString()}</td>
 								<td>{order.waktu}</td>
 								<td>
-									<button className="btn btn-link btn-sm" dataOrder={order} onClick={showModal}>Detail</button>
+									<button className="btn btn-link btn-sm" dataOrder={order.order_data} onClick={showModal}>Detail</button>
 								</td>
 							</tr>
     				))
@@ -55,28 +55,24 @@ function modalBody(modalData) {
           <td className="text-break">{modalData.waktu}</td>
         </tr>
         <tr>
-          <th scope="row"><small><b>Customer ID</b></small></th>
-          <td className="text-break">{modalData.customer_id}</td>
-        </tr>
-        <tr>
           <th scope="row"><small><b>Nama</b></small></th>
-          <td className="text-break"></td>
+          <td className="text-break">{modalData.nama_lengkap}</td>
         </tr>
         <tr>
           <th scope="row"><small><b>No. HP</b></small></th>
-          <td className="text-break"></td>
+          <td className="text-break">{modalData.no_hp}</td>
         </tr>
         <tr>
           <th scope="row"><small><b>Alamat Kirim</b></small></th>
-          <td className="text-break"></td>
+          <td className="text-break">{modalData.alamat_kirim}</td>
         </tr>
         <tr>
           <th scope="row"><small><b>Keterangan</b></small></th>
-          <td className="text-break"></td>
+          <td className="text-break">{modalData.keterangan}</td>
         </tr>
         <tr>
           <th scope="row"><small><b>Barang</b></small></th>
-          <td className="text-break"></td>
+          <td className="text-break">{modalData.cart_data}</td>
         </tr>
       </tbody>
     </table>	

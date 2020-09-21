@@ -54,7 +54,6 @@ function Checkout(props) {
 			no_hp: no_hp,
 			alamat_kirim: alamat_kirim,
 			keterangan: keterangan,
-			referrer: document.referrer,
 			cart_data: carts
 		}
 
@@ -96,7 +95,7 @@ function Checkout(props) {
 							{(!isSubmit) ? "Kirim" 
 								: (result === null) 
 								? <Spinner aria-hidden="true" className="submit-spinner" animation="border" role="status" variant="warning"></Spinner>
-								: "Terkirim"
+								: (result.message === "order-success") ? "Terkirim" : "Gagal terkirim"
 							}
 						</button>
 					</div>
