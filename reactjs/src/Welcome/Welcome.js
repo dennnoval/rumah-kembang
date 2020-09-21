@@ -86,7 +86,7 @@ function Welcome(props) {
       }})
       .catch(error => {if (mounted) setError(error)})
 
-    return () => source.cancel()
+    return () => {mounted = false; source.cancel()}
   }, [])
 
 	return(

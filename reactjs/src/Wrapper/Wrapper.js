@@ -10,19 +10,23 @@ function Wrapper(props) {
 	let classes = " " + props.classes
 	let active = props.active
 
-	let content = function() {
-		console.log(ids)
-		return(
-			(ids === " search-button top-side")
-			? <Search active={active}/>
-			: <Cart active={active} ids={ids}/>
-		)
+	let content = function(act) {
+		if (act) {
+			switch (ids) {
+				case " search-button top-side": 
+					return <Search active={act}/>
+				case " cart-button bottom-side": 
+					return <Cart active={act}/>
+				default: break
+			}
+		}
+		return ""
 	}
 
 	return(
 		<main id={"side-wrapper" + ids} className={"bg-light" + (active ? " active position-absolute" : "") + classes}>
 			<div className="container py-2">
-				{content()}
+				{content(active)}
 			</div>
   	</main>
 	)

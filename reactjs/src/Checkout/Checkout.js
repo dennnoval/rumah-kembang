@@ -8,7 +8,6 @@ import "./Checkout.css"
 import Order from "../REST/Order"
 
 function successModal(show, result) {
-	let cookieId = encodeURIComponent(document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1])
 	return(
 		<Modal show={show} onHide={() => null} aria-labelledby="contained-modal-title-vcenter" centered>
 			<Modal.Body>
@@ -17,8 +16,8 @@ function successModal(show, result) {
 							<h5>Terima kasih, pesanan anda telah kami terima</h5>
 							<small>Order ID: </small>
 							<h3 className="text-break">{result.orderId}</h3>
-							<Link to={"/myorder/" + cookieId}><small>Cek status</small></Link>
-							{sessionStorage.clear()}
+							<Link to="/myorder"><small>Cek status</small></Link>
+							{localStorage.clear()}
 						</div>
 					: <>
 							<p>Maaf, proses pemesanan gagal</p>
@@ -45,8 +44,8 @@ function Checkout(props) {
 		const keterangan = form.elements[3].value
 
 		var carts = {}
-		for (let i = 0; i < sessionStorage.length; i++) {
-			carts[`${sessionStorage.key(i)}`] = sessionStorage.getItem(sessionStorage.key(i))
+		for (let i = 0; i < localStorage.length; i++) {
+			carts[`${localStorage.key(i)}`] = localStorage.getItem(localStorage.key(i))
 		}
 
 		const formData = {

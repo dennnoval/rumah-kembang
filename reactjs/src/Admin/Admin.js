@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 import axios from 'axios'
 import Modal from "react-bootstrap/Modal"
 
@@ -7,27 +7,25 @@ import "./Admin.css"
 
 import AdminAPI from "../REST/Admin"
 
-function orderList(data, showModal) {
+function orderList(jsonData, showModal) {
 	return(
 		<table className="table table-responsive">
 			<thead>
 				<tr>
-					<th>#</th>
-					<th>Order ID</th>
-					<th>Tanggal</th>
-					<th>Waktu</th>
-					<th>Detail</th>
+					{["#", "Kode Order", "Tanggal", "Waktu", "Detail"].map(th => (
+						<th key={th}>{th}</th>	
+					))}
 				</tr>
 			</thead>
       <tbody>
-      	{data.map((order, index) => (
+      	{jsonData.map((order, index) => (
       		<tr key={Math.random(1)}>
 						<td className="align-middle">{index + 1}</td>
 						<td className="align-middle"><b>{order.id}</b></td>
-						<td className="align-middle">{new Date(order.tanggal).toLocaleDateString()}</td>
+						<td className="align-middle">{new Date(order.tanggal).toLocaleDateString("id-ID")}</td>
 						<td className="align-middle">{order.waktu}</td>
 						<td className="align-middle">
-							<button className="btn btn-link btn-sm" orderData={JSON.stringify(order)} dataTarget="#order-detail" onClick={showModal}>Detail</button>
+							<button className="btn btn-link btn-sm" data-order={JSON.stringify(order)} data-target="#order-detail" onClick={showModal}>Detail</button>
 						</td>
 					</tr>
     		))}
@@ -36,46 +34,39 @@ function orderList(data, showModal) {
 	)
 }
 
-function modalBody(modalData) {
+function modalBody(jsonData) {
+	var orderData = JSON.parse(jsonData.order_data)
+	const ths = {
+		"Kode Order": jsonData.id, 
+		"Tanggal": new Date(jsonData.tanggal).toLocaleDateString("id-ID"), 
+		"Waktu": jsonData.waktu, 
+		"Customer ID": jsonData.customer_id, 
+		"Barang": orderData.cart_data, 
+		"Nama": orderData.nama_lengkap, 
+		"No. HP": orderData.no_hp, 
+		"Alamat Kirim": orderData.alamat_kirim, 
+		"Keterangan": orderData.keterangan
+	}
+
 	return(
 		<table className="table table-sm table-bordered">
       <tbody>
-        <tr>
-          <th scope="row"><small><b>Order ID</b></small></th>
-          <td className="text-break"><b>{modalData.id}</b></td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Tanggal</b></small></th>
-          <td className="text-break">{new Date(modalData.tanggal).toLocaleDateString()}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Waktu</b></small></th>
-          <td className="text-break">{modalData.waktu}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Customer ID</b></small></th>
-          <td className="text-break">{modalData.customer_id}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Nama</b></small></th>
-          <td className="text-break"></td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>No. HP</b></small></th>
-          <td className="text-break"></td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Alamat Kirim</b></small></th>
-          <td className="text-break"></td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Keterangan</b></small></th>
-          <td className="text-break"></td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Barang</b></small></th>
-          <td className="text-break"></td>
-        </tr>
+      	{Object.keys(ths).map((key, ind) => (
+      		<tr key={key}>
+	          <th scope="row"><small><b>{key}</b></small></th>
+	          <td className="text-break overflow-auto">
+	          	{(typeof(ths[key]) === "object")
+	          		? Object.keys(ths[key]).map(key2 => (
+	          				<p key={key2}>
+	          					<span className="col-6">{key2}</span>
+	          					<span className="col-6">{ths[key][key2]}</span>
+	          				</p>
+	          			))
+	          		: ths[key]
+	          	}
+	          </td>
+	        </tr>
+    		))}
       </tbody>
     </table>	
 	)
@@ -87,20 +78,21 @@ function Admin(props) {
   let [modalData, setModalData] = React.useState(null)
 
 	React.useEffect(() => {
+		let mounted = true
 		let source = axios.CancelToken.source()
 
 		AdminAPI.getAllOrders(source.token)
 			.then(res => {
-        setData(res.data.result)
+        if (mounted) setData(res.data.result)
 			})
 			.catch(error => console.log(error))
 
-		return () => source.cancel()
+		return () => {mounted = false; source.cancel()}
 	})
 
 	const setModalContent = (e) => {
 		const button = e.currentTarget
-		const orderData = JSON.parse(button.getAttribute("orderdata"))
+		const orderData = JSON.parse(button.getAttribute("data-order"))
 		setModalData(orderData)
 	}
 

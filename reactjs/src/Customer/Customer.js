@@ -1,6 +1,7 @@
 import React from 'react'
 import Modal from "react-bootstrap/Modal"
 import Spinner from "react-bootstrap/Spinner"
+import Badge from "react-bootstrap/Badge"
 import axios from 'axios'
 
 import "./Customer.css"
@@ -9,11 +10,11 @@ import CustomerAPI from "../REST/Customer"
 
 function orderList(loading, data, showModal) {
 	return(
-		<table className="table table-sm table-bordered table-responsive">
+		<table className="table table-responsive">
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Order ID</th>
+					<th>Kode Order</th>
 					<th>Tanggal</th>
 					<th>Waktu</th>
 					<th>Detail</th>
@@ -25,10 +26,10 @@ function orderList(loading, data, showModal) {
 		      		<tr key={Math.random(1)}>
 								<td>{index + 1}</td>
 								<td>{order.id}</td>
-								<td>{new Date(order.tanggal).toLocaleDateString()}</td>
+								<td>{new Date(order.tanggal).toLocaleDateString("id-ID")}</td>
 								<td>{order.waktu}</td>
 								<td>
-									<button className="btn btn-link btn-sm" dataOrder={order.order_data} onClick={showModal}>Detail</button>
+									<button className="btn btn-link btn-sm" data-order={JSON.stringify(order)} onClick={showModal}>Detail</button>
 								</td>
 							</tr>
     				))
@@ -38,42 +39,38 @@ function orderList(loading, data, showModal) {
 	)
 }
 
-function modalBody(modalData) {
+function modalBody(jsonData) {
+	var orderData = JSON.parse(jsonData.order_data)
+	const ths = {
+		"Kode Order": jsonData.id, 
+		"Tanggal": new Date(jsonData.tanggal).toLocaleDateString("id-ID"), 
+		"Waktu": jsonData.waktu, 
+		"Barang": orderData.cart_data, 
+		"Nama": orderData.nama_lengkap, 
+		"No. HP": orderData.no_hp, 
+		"Alamat Kirim": orderData.alamat_kirim, 
+		"Keterangan": orderData.keterangan
+	}
+
 	return(
 		<table className="table table-sm table-bordered">
       <tbody>
-        <tr>
-          <th scope="row"><small><b>Order ID</b></small></th>
-          <td className="text-break"><b>{modalData.id}</b></td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Tanggal</b></small></th>
-          <td className="text-break">{new Date(modalData.tanggal).toLocaleDateString()}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Waktu</b></small></th>
-          <td className="text-break">{modalData.waktu}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Nama</b></small></th>
-          <td className="text-break">{modalData.nama_lengkap}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>No. HP</b></small></th>
-          <td className="text-break">{modalData.no_hp}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Alamat Kirim</b></small></th>
-          <td className="text-break">{modalData.alamat_kirim}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Keterangan</b></small></th>
-          <td className="text-break">{modalData.keterangan}</td>
-        </tr>
-        <tr>
-          <th scope="row"><small><b>Barang</b></small></th>
-          <td className="text-break">{modalData.cart_data}</td>
-        </tr>
+      	{Object.keys(ths).map((key, ind) => (
+      		<tr key={key}>
+	          <th scope="row"><small><b>{key}</b></small></th>
+	          <td className="text-break overflow-auto">
+	          	{(typeof(ths[key]) === "object")
+	          		? Object.keys(ths[key]).map(key2 => (
+	          				<p key={key2}>
+	          					<span className="col-6">{key2}</span>
+	          					<span className="col-6">{ths[key][key2]}</span>
+	          				</p>
+	          			))
+	          		: ths[key]
+	          	}
+	          </td>
+          </tr>	
+    		))}
       </tbody>
     </table>	
 	)
@@ -86,21 +83,25 @@ function Customer(props) {
   let [modalData, setModalData] = React.useState(null)
 
   React.useEffect(() => {
+  	let mounted = true
 		let source = axios.CancelToken.source()
+		let cookieId = document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1]
 
-		CustomerAPI.getCustomerOrders(source.token, props.match.params.customerId)
+		CustomerAPI.getCustomerOrders(source.token, cookieId)
 			.then(res => {
-				setIsLoaded(true)
-        setData(res.data.result)
+				if (mounted) {
+					setIsLoaded(true)
+	        setData(res.data.result)
+	      }
 			})
 			.catch(error => console.log(error))
 
-		return () => source.cancel()
-	}, [props.match.params.customerId])
+		return () => {mounted = false; source.cancel()}
+	})
 
 	const setModalContent = (e) => {
 		const button = e.currentTarget
-		const orderData = JSON.parse(button.getAttribute("orderdata"))
+		const orderData = JSON.parse(button.getAttribute("data-order"))
 		setModalData(orderData)
 	}
 
@@ -112,7 +113,8 @@ function Customer(props) {
 
 			<Modal id="order-detail" show={showModal} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
 				<Modal.Header closeButton>
-					<h5 className="my-0"><b>Order Detail</b></h5>
+					<h5 className="my-auto"><b>Order Detail</b></h5>
+					<h5 className="my-auto ml-3"><Badge variant="warning">Pending</Badge></h5>
 				</Modal.Header>
 				<Modal.Body>
 					{(modalData === null) ? "No data"

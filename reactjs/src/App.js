@@ -10,6 +10,7 @@ import Categories from "./Categories/Categories"
 import Tags from "./Tags/Tags"
 import Detail from "./Detail/Detail"
 import Checkout from "./Checkout/Checkout"
+import AdminHeader from "./Header/AdminHeader"
 import Admin from "./Admin/Admin"
 import Customer from "./Customer/Customer"
 
@@ -49,7 +50,6 @@ function App(props) {
 
   return (
     <>
-      <Route exact path="/superuser" component={Admin}/>
     	<Switch>
         <Route exact path="/">
           <Header toggleWrapper={toggleWrapper}/>
@@ -57,13 +57,15 @@ function App(props) {
         </Route>
         <Route path="/:type">
           <Header2 toggleWrapper={toggleWrapper}/>
-          <Route exact path="/myorder/:customerId" component={Customer}/>
+          <Route exact path="/superuser" component={AdminHeader}/>
+          <Route exact path="/superuser" component={Admin}/>
+          <Route exact path="/myorder" component={Customer}/>
           <Route exact path="/checkout" component={Checkout}/>
+          <Route exact path="/404"/>
           <Route exact path="/kategori/:categoryName" component={Categories}/>
           <Route exact path="/tag/:tagName" component={Tags}/>
           <Route exact path="/produk/:kode" component={Detail}/>
         </Route>
-        <Route exact path="/404"/>
       </Switch>
       <Wrapper active={active} ids={ids} classes={classes}/>
       <div className={"overlay" + (active ? " active" : "")} onClick={(e) => setActive(!active)}></div>

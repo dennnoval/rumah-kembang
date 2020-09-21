@@ -79,10 +79,10 @@ function Detail(props) {
   }, [props.match.params.kode])
 
   const addToCart = (productId) => {
-    if (sessionStorage.getItem(productId) === null)
-      sessionStorage.setItem(productId, 1)
+    if (localStorage.getItem(productId) === null)
+      localStorage.setItem(productId, 1)
     else
-      sessionStorage.setItem(productId, parseInt(sessionStorage.getItem(productId)) + 1)
+      localStorage.setItem(productId, parseInt(localStorage.getItem(productId)) + 1)
     setShowToast(true)
   }
 
@@ -114,15 +114,11 @@ function Detail(props) {
               {productDescription(error, isLoaded, productByKode, "product-size")}
               <tr>
                 <th scope="row"><small><b>Kategori</b></small></th>
-                <td>
-                  {productDescription(error, isLoaded, productByKode, "product-category")}
-                </td>
+                <td>{productDescription(error, isLoaded, productByKode, "product-category")}</td>
               </tr>
               <tr>
                 <th scope="row"><small><b>Tags</b></small></th>
-                <td>
-                  {productDescription(error, isLoaded, productByKode, "product-tags")}
-                </td>
+                <td>{productDescription(error, isLoaded, productByKode, "product-tags")}</td>
               </tr>
             </tbody>
           </table>
