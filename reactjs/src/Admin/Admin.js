@@ -125,6 +125,19 @@ function Admin(props) {
 						: modalBody(modalData)
 					}
 				</Modal.Body>
+				<Modal.Footer>
+			    <div className="col my-auto text-left">
+		    		<h6><b>Tanggapan</b></h6>
+		    	</div>
+		    	<div className="col my-auto">
+		    		<select className="form-control form-control-sm">
+		    			{["Pending", "Di proses", "Selesai", "Batalkan"].map((a, b) => (
+		    					<option key={a}>{a}</option>
+		    				))
+		    			}
+		    		</select>
+		    	</div>
+			  </Modal.Footer>
 			</Modal>	
 		</main>	
 	)
