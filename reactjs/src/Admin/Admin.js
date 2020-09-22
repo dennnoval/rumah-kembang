@@ -1,14 +1,14 @@
 import React from 'react'
-// import { Link } from "react-router-dom"
-import axios from 'axios'
 import Modal from "react-bootstrap/Modal"
 import Badge from "react-bootstrap/Badge"
+import Toast from "react-bootstrap/Toast"
+import axios from 'axios'
 
 import "./Admin.css"
 
-import AdminAPI from "../REST/Admin"
+import Order from "../REST/Order"
 
-function orderList(jsonData, showModal) {
+function orderList(loading, jsonData, showModal) {
 	return(
 		<table className="table table-responsive">
 			<thead>
@@ -19,17 +19,19 @@ function orderList(jsonData, showModal) {
 				</tr>
 			</thead>
       <tbody>
-      	{jsonData.map((order, index) => (
-      		<tr key={Math.random(1)}>
-						<td className="align-middle">{index + 1}</td>
-						<td className="align-middle"><b>{order.id}</b></td>
-						<td className="align-middle">{new Date(order.tanggal).toLocaleDateString("id-ID")}</td>
-						<td className="align-middle">{order.waktu}</td>
-						<td className="align-middle">
-							<button className="btn btn-link btn-sm" data-order={JSON.stringify(order)} data-target="#order-detail" onClick={showModal}>Detail</button>
-						</td>
-					</tr>
-    		))}
+      	{(!loading) ? <tr className="text-center"><td>Loading list...</td></tr>
+      		: jsonData.map((order, index) => (
+		      		<tr key={Math.random(1)}>
+								<td className="align-middle">{index + 1}</td>
+								<td className="align-middle"><b>{order.id}</b></td>
+								<td className="align-middle">{new Date(order.tanggal).toLocaleDateString("id-ID")}</td>
+								<td className="align-middle">{order.waktu}</td>
+								<td className="align-middle">
+									<button className="btn btn-link btn-sm" data-order={JSON.stringify(order)} data-target="#order-detail" onClick={showModal}>Detail</button>
+								</td>
+							</tr>
+						))
+    		}
       </tbody>
     </table>	
 	)
@@ -74,17 +76,24 @@ function modalBody(jsonData) {
 }
 
 function Admin(props) {
+	let [isLoaded, setIsLoaded] = React.useState(false)
   let [data, setData] = React.useState([])
   let [showModal, setShowModal] = React.useState(false)
   let [modalData, setModalData] = React.useState(null)
+  let [selectOrderStatus, setSelectOrderStatus] = React.useState((modalData !== null) ? modalData.status : "")
+  let [showToast, setShowToast] = React.useState(false)
+  let [toastMsg, setToastMsg] = React.useState("")
 
 	React.useEffect(() => {
 		let mounted = true
 		let source = axios.CancelToken.source()
 
-		AdminAPI.getAllOrders(source.token)
+		Order.getAllOrders(source.token)
 			.then(res => {
-        if (mounted) setData(res.data.result)
+        if (mounted) {
+        	setIsLoaded(true)
+        	setData(res.data.result)
+        }
 			})
 			.catch(error => console.log(error))
 
@@ -95,12 +104,24 @@ function Admin(props) {
 		const button = e.currentTarget
 		const orderData = JSON.parse(button.getAttribute("data-order"))
 		setModalData(orderData)
+		setSelectOrderStatus(orderData.status)
+	}
+
+	const updateOrderStatus = (e) => {
+		setSelectOrderStatus(e.target.value)
+		Order.setOrderStatus(e.target.value, modalData.id, encodeURIComponent(modalData.customer_id))
+			.then(res => {
+				if (res.status === 200)
+					setToastMsg("Status order berhasil di perbaharui")
+				else setToastMsg("Status order gagal di perbaharui")
+			})
+			.catch(error => console.log(error))
 	}
 
 	return(
 		<main id="admin">
   		<div className="container my-2 py-2 bg-light px-2">
-				{orderList(data, (e) => {setShowModal(true); setModalContent(e)})}
+				{orderList(isLoaded, data, (e) => {setShowModal(true); setModalContent(e)})}
 			</div>
 
 			<Modal id="order-detail" show={showModal} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -115,7 +136,7 @@ function Admin(props) {
 										: (modalData.status === "cancel") ? "danger"
 										: "warning"
 									}>
-									{modalData.status}
+										{modalData.status}
 								</Badge>
 						}
 					</h5>
@@ -130,14 +151,25 @@ function Admin(props) {
 		    		<h6><b>Tanggapan</b></h6>
 		    	</div>
 		    	<div className="col my-auto">
-		    		<select className="form-control form-control-sm">
-		    			{["Pending", "Di proses", "Selesai", "Batalkan"].map((a, b) => (
-		    					<option key={a}>{a}</option>
-		    				))
-		    			}
-		    		</select>
+		    		{(modalData === null) ? "No data"
+		    			: <select className="form-control form-control-sm" value={selectOrderStatus} onChange={updateOrderStatus}>
+				    			{["pending", "process", "complete", "cancel"].map((val, indx) => (
+				    					<option key={val} value={val}>
+				    						{(indx === 0) ? "Pending"
+				    							: (indx === 1) ? "Di proses"
+				    							: (indx === 2) ? "Selesai"
+				    							: "Batalkan"
+				    						}
+			    						</option>
+				    				))
+				    			}
+				    		</select>
+		    		}
 		    	</div>
 			  </Modal.Footer>
+			  <Toast id="cart-added-toast" className="mx-2 fixed-bottom" show={showToast} autohide delay={3000} onClose={() => setShowToast(false)} style={{"boxShadow": "none"}}>
+	        <Toast.Body>{toastMsg}</Toast.Body>
+	      </Toast>
 			</Modal>	
 		</main>	
 	)

@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import "./Customer.css"
 
-import CustomerAPI from "../REST/Customer"
+import Order from "../REST/Order"
 
 function orderList(loading, data, showModal) {
 	return(
@@ -89,7 +89,7 @@ function Customer(props) {
 			? document.cookie.split("; ").find(row => row.startsWith("customer_id")).split("=")[1]
 			: null
 
-		CustomerAPI.getCustomerOrders(source.token, cookieId)
+		Order.getCustomerOrders(source.token, cookieId)
 			.then(res => {
 				if (mounted) {
 					setIsLoaded(true)

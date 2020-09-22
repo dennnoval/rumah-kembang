@@ -14,6 +14,8 @@ import AdminHeader from "./Header/AdminHeader"
 import Admin from "./Admin/Admin"
 import Customer from "./Customer/Customer"
 
+import Helper from "./REST/Helper"
+
 function App(props) {
 	let [active, setActive] = React.useState(false)
 	let [classes, setClasses] = React.useState("left")
@@ -22,16 +24,12 @@ function App(props) {
   React.useEffect(() => {
     var source = axios.CancelToken.source()
     if (document.cookie === "") {
-	    axios({
-	        method: "GET",
-	        url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Customer/setCustomerCookie',
-	        cancelToken: source.token
-	      })
+	    Helper.generateRandomId(source.token)
 	      .then(res => {
-	        document.cookie = `customer_id=${encodeURIComponent(res.data.result.customerId)}; path=/; max-age=3600`
+          const randomId = encodeURIComponent(res.data.result.randomId)
+	        document.cookie = `customer_id=${randomId}; path=/; max-age=3600`
 	      })
 	      .catch(err => console.log(err))
-	      console.log(document.cookie)
     }
     return () => source.cancel()
   })
