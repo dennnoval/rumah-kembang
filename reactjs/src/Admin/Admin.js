@@ -2,6 +2,7 @@ import React from 'react'
 // import { Link } from "react-router-dom"
 import axios from 'axios'
 import Modal from "react-bootstrap/Modal"
+import Badge from "react-bootstrap/Badge"
 
 import "./Admin.css"
 
@@ -68,7 +69,7 @@ function modalBody(jsonData) {
 	        </tr>
     		))}
       </tbody>
-    </table>	
+    </table>
 	)
 }
 
@@ -104,7 +105,20 @@ function Admin(props) {
 
 			<Modal id="order-detail" show={showModal} onHide={() => setShowModal(false)} aria-labelledby="contained-modal-title-vcenter" centered>
 				<Modal.Header closeButton>
-					<h5 className="my-0"><b>Order Detail</b></h5>
+					<h5 className="my-auto"><b>Order Detail</b></h5>
+					<h5 className="my-auto ml-3">
+						{(modalData === null) 
+							? "No status" 
+							: <Badge className="text-capitalize" variant={
+										(modalData.status === "complete") ? "success"
+										: (modalData.status === "process") ? "info"
+										: (modalData.status === "cancel") ? "danger"
+										: "warning"
+									}>
+									{modalData.status}
+								</Badge>
+						}
+					</h5>
 				</Modal.Header>
 				<Modal.Body>
 					{(modalData === null) ? "No data"

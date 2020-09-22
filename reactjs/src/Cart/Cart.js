@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom"
 
 function Cart(props) {
-	let [cartStorage, setCartStorage] = React.useState(null)
+	let [cartStorage, setCartStorage] = React.useState({})
 
 	React.useEffect(() => {
 		var carts = {}
@@ -10,8 +10,8 @@ function Cart(props) {
 			for (let i = 0; i < localStorage.length; i++) {
 				carts[`${localStorage.key(i)}`] = localStorage.getItem(localStorage.key(i))
 			}
-			setCartStorage(carts)
 		}
+		setCartStorage(carts)
 	}, [])
 
 	const changeItemCount = (e, key) => {
@@ -19,21 +19,30 @@ function Cart(props) {
 		setCartStorage({[key]: localStorage.getItem(key)})
 	}
 
+	const dropCartItem = (e, key) => {
+		localStorage.removeItem(key)
+	}
+
 	return(
 		<>
-			<h6 className="mb-3 pb-2 border-bottom"><b>Keranjang</b></h6>
-			{(cartStorage === null || cartStorage === undefined) 
+			<div className="row mb-3 pb-2 border-bottom">
+				<h6 className="col-6 my-auto"><b>Keranjang</b></h6>
+				<span className="col-6 my-auto text-right">
+					<Link to="/myorder">My Order</Link>
+				</span>
+			</div>
+			{(Object.keys(cartStorage).length === 0 || cartStorage === undefined) 
 				? <p>---- Keranjang kosong ----</p>
 				: <table className="table table-sm table-bordered">
 						<tbody>
 							{Object.keys(cartStorage).map((key, ind) => (
 								<tr key={key}>
 									<td className="col-8 align-middle"><Link to={"/produk/" + key}>{key}</Link></td>
-									<td className="col-4">
-										<input type="number" value={cartStorage[key]} onChange={e => changeItemCount(e, key)} className="form-control form-control-sm"/>
+									<td className="col">
+										<input type="number" value={cartStorage[key]} min="1" onChange={e => changeItemCount(e, key)} className="form-control form-control-sm"/>
 									</td>
 									<td className="align-middle p-0">
-										<span className="navbar-toggler text-danger" type="button" onClick={e => localStorage.removeItem(key)}>x</span>
+										<span className="navbar-toggler text-danger" type="button" onClick={e => dropCartItem(e, key)}>x</span>
 									</td>
 								</tr>
 							))}
