@@ -109,10 +109,9 @@ function Admin(props) {
 
 	const updateOrderStatus = (e) => {
 		setSelectOrderStatus(e.target.value)
-		Order.setOrderStatus(e.target.value, modalData.id, encodeURIComponent(modalData.customer_id))
+		Order.setOrderStatus(e.target.value, modalData.id, modalData.customer_id)
 			.then(res => {
-				if (res.status === 200)
-					setToastMsg("Status order berhasil di perbaharui")
+				if (res.result.rowCount > 0) setToastMsg("Status order berhasil di perbaharui")
 				else setToastMsg("Status order gagal di perbaharui")
 			})
 			.catch(error => console.log(error))
@@ -167,7 +166,7 @@ function Admin(props) {
 		    		}
 		    	</div>
 			  </Modal.Footer>
-			  <Toast id="cart-added-toast" className="mx-2 fixed-bottom" show={showToast} autohide delay={3000} onClose={() => setShowToast(false)} style={{"boxShadow": "none"}}>
+			  <Toast id="cart-added-toast" className="mx-2 fixed-bottom" show={showToast} autohide delay={3000} onClose={() => setShowToast(false)}>
 	        <Toast.Body>{toastMsg}</Toast.Body>
 	      </Toast>
 			</Modal>	

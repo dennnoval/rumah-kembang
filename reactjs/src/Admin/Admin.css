@@ -1,3 +1,7 @@
 #admin {
 	padding-top: 3.6rem;
 }
+
+.toast {
+	box-shadow: none;
+}
