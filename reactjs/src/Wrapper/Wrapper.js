@@ -4,6 +4,7 @@ import "./Wrapper.css"
 
 import Search from "../Search/Search"
 import Cart from "../Cart/Cart"
+import Filter from "../Filter/Filter"
 
 function Wrapper(props) {
 	let ids = " " + props.ids
@@ -14,9 +15,11 @@ function Wrapper(props) {
 		if (act) {
 			switch (ids) {
 				case " search-button top-side": 
-					return <Search active={act}/>
+					return <Search active={act} closeWrapper={props.toggleWrapper}/>
 				case " cart-button bottom-side": 
-					return <Cart active={act}/>
+					return <Cart active={act} closeWrapper={props.toggleWrapper}/>
+				case " filter-button right-side": 
+					return <Filter active={act} closeWrapper={props.toggleWrapper}/>
 				default: break
 			}
 		}

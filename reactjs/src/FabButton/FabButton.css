@@ -1,11 +1,13 @@
-#fabBtn-filter {
+.fabBtn-filter {
 	position: fixed;
-	right: -100%;
+	bottom: 1.5em;
+	right: 1em;
 	z-index: 1032;
 	transition: all 0.3s;
 }
 
-#fabBtn-filter.active {
-	right: 5%;
-	bottom: 5%;
+.fabBtn-filter.active {
+	z-index: 1030;
+	/*right: 5%;
+	bottom: 5%;*/
 }

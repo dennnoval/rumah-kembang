@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Modal from "react-bootstrap/Modal"
 import Spinner from "react-bootstrap/Spinner"
 import Badge from "react-bootstrap/Badge"
@@ -10,19 +11,25 @@ import Order from "../REST/Order"
 
 function orderList(loading, data, showModal) {
 	return(
-		<table className="table table-responsive">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Kode Order</th>
-					<th>Tanggal</th>
-					<th>Waktu</th>
-					<th>Detail</th>
-				</tr>
-			</thead>
-      <tbody>
-      	{(!loading) ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
-      		: data.map((order, index) => (
+		(!loading) ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
+  		: (data.length === 0) 
+  		? <div className="text-center">
+  				<p>--- Daftar pesanan anda kosong ---</p>
+  				<p>Silahkan berbelanja terlebih dahulu</p>
+  				<Link to="/">Belanja</Link>
+				</div>
+  		: <table className="table table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Kode Order</th>
+							<th>Tanggal</th>
+							<th>Waktu</th>
+							<th>Detail</th>
+						</tr>
+					</thead>
+      		<tbody>
+      			{data.map((order, index) => (
 		      		<tr key={Math.random(1)}>
 								<td>{index + 1}</td>
 								<td>{order.id}</td>
@@ -32,10 +39,9 @@ function orderList(loading, data, showModal) {
 									<button className="btn btn-link btn-sm" data-order={JSON.stringify(order)} onClick={showModal}>Detail</button>
 								</td>
 							</tr>
-    				))
-    		}
-      </tbody>
-    </table>	
+    				))}
+    			</tbody>
+    		</table>
 	)
 }
 

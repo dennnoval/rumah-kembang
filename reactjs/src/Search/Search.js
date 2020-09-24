@@ -26,7 +26,7 @@ function Search(props) {
 		for (let x in tags) {
 			if (tags[x].indexOf(value) !== -1)
 				return(
-					<Link key={data.kode} to={"/produk/" + data.kode} className="list-group-item list-item-action flex-fill p-1">
+					<Link key={data.kode} to={"/produk/" + data.kode} onClick={props.closeWrapper} className="list-group-item list-item-action flex-fill p-1">
 						<img id="searchImg" src={data.foto} className="img-fluid" alt={"Photo: " + data.kode}/>
 						<span className="ml-3">{tags[x]}</span>
 					</Link>

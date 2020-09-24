@@ -3,10 +3,13 @@ import React from "react"
 import "./FabButton.css"
 
 function FabButton(props) {
+	let activeStyle = (props.active) ? " active" : ""
   return(
   	<>
-  		<span id="fabBtn-filter" type="button" className={"btn btn-lg btn-danger rounded-circle" + props.active} onClick={props.filterWrapper}>F</span>
-  	</>	
+  		<span id="filter-button right-side" type="button" className={"fabBtn-filter btn btn-lg btn-danger rounded-circle" + activeStyle} onClick={props.filterWrapper}>
+  			<small>Fil</small>
+  		</span>
+  	</>
 	)
 }
 

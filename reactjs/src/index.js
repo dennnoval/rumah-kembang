@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { HashRouter as Router } from 'react-router-dom'
 import { isMobileOnly, isAndroid, isIOS, isWinPhone } from 'react-device-detect'
 import * as serviceWorker from './serviceWorker'
 
@@ -22,9 +21,7 @@ function notMobileDevice() {
 
 if (isMobileOnly && (isAndroid || isIOS || isWinPhone))
 	ReactDOM.render(
-		<Router>
-		  <App/>
-		</Router>,
+		<App/>,
 	  document.getElementById('root')
 	)
 else notMobileDevice()

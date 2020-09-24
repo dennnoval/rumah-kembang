@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route } from "react-router-dom"
+import { HashRouter as Router, Switch, Route } from "react-router-dom"
 import axios from 'axios'
 
 import Wrapper from "./Wrapper/Wrapper"
@@ -39,15 +39,15 @@ function App(props) {
     let elementID = e.currentTarget.id
 		switch (elementID.split(" ")[1]) {
 			case "top-side" : setIds(elementID); setClasses("top rounded-bottom w-100 h-auto mh-75"); break
-			case "right-side" : setIds(elementID); setClasses("right"); break
+			case "right-side" : setIds(elementID); setClasses("right w-75 h-50 rounded-left"); break
 			case "bottom-side" : setIds(elementID); setClasses("bottom rounded-top w-100 h-50"); break
-			default : setIds(elementID); setClasses("left"); break
+			default : setIds(elementID); setClasses("left w-75 h-100"); break
 		}
 		setActive(!active)
 	}
 
   return (
-    <>
+    <Router>
     	<Switch>
         <Route exact path="/">
           <Header toggleWrapper={toggleWrapper}/>
@@ -55,19 +55,23 @@ function App(props) {
         </Route>
         <Route path="/:type">
           <Header2 toggleWrapper={toggleWrapper}/>
-          <Route exact path="/superuser" component={AdminHeader}/>
-          <Route exact path="/superuser" component={Admin}/>
+          <Route exact path="/superuser">
+            <AdminHeader/>
+            <Admin/>
+          </Route>
           <Route exact path="/myorder" component={Customer}/>
           <Route exact path="/checkout" component={Checkout}/>
           <Route exact path="/404"/>
-          <Route exact path="/kategori/:categoryName" component={Categories}/>
+          <Route exact path="/kategori/:categoryName">
+            <Categories active={active} toggleWrapper={toggleWrapper}/>
+          </Route>
           <Route exact path="/tag/:tagName" component={Tags}/>
           <Route exact path="/produk/:kode" component={Detail}/>
         </Route>
       </Switch>
-      <Wrapper active={active} ids={ids} classes={classes}/>
+      <Wrapper active={active} ids={ids} classes={classes} toggleWrapper={() => setActive(!active)}/>
       <div className={"overlay" + (active ? " active" : "")} onClick={(e) => setActive(!active)}></div>
-    </>
+    </Router>
   )
   
 }
