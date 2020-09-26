@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Carousel from "react-bootstrap/Carousel"
-import Spinner from "react-bootstrap/Spinner"
+import SkeletonLoader from "tiny-skeleton-loader-react"
 
 import "./Welcome.css"
 
@@ -15,7 +15,7 @@ import Banner from "../REST/Banner"
 const carouselList = (...args) => {
   return(
     (args[0]) ? console.log(args[0])
-    : (!args[1]) ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
+    : (!args[1]) ? <SkeletonLoader background="#ccc" height="220px"/>
     : <Carousel id="home-carousel">
         {args[2].map((carousel, index) => (
           <Carousel.Item as={Link} to={"/produk/"+carousel.kode} key={carousel.id} className="text-center">
@@ -30,11 +30,22 @@ const catList = (...args) => {
   const catColor = ["danger", "warning", "success", "primary", "secondary"]
   return(
     (args[0]) ? console.log(args[0])
-    : (!args[1]) ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
+    : (!args[1]) 
+    ? <div className="row p-2">
+        <div className="col-4 px-2">
+           <SkeletonLoader circle background="#ccc" width="100%" height="74px"/>
+        </div>
+        <div className="col-4 px-2">
+           <SkeletonLoader circle background="#ccc" width="100%" height="74px"/>
+        </div>
+        <div className="col-4 px-2">
+           <SkeletonLoader circle background="#ccc" width="100%" height="74px"/>
+        </div>
+      </div>
     : <div className="list-unstyled list-group list-group-horizontal overflow-auto">
         {
           args[2].map((category, index) => (
-            <Link key={index + Math.random(9)} to={"/kategori/" + category.slug} className={"text-capitalize font-italic border rounded-circle text-dark mr-3 list-group-item list-group-item-action flex-fill text-center list-group-item-"+catColor[index]}>
+            <Link key={category.slug} to={"/kategori/" + category.slug} className={"text-capitalize font-italic border rounded-circle text-dark mr-3 list-group-item list-group-item-action flex-fill text-center list-group-item-"+catColor[index]}>
               {category.nama}
             </Link>
           ))
@@ -46,14 +57,37 @@ const catList = (...args) => {
 const recommendList = (...args) => {
   return(
     (args[0]) ? console.log(args[0])
-    : (!args[1]) ? <div className="text-center"><Spinner role="loading" animation="grow" variant="secondary"/></div>
+    : (!args[1]) 
+    ? <div className="list-group list-group-horizontal">
+        <div className="list-group-item col-6 p-1 border-0 rounded-0">
+          <div className="card mr-0 pr-0">
+            <div className="p-1 border-bottom">
+              <SkeletonLoader background="#ccc" height="120px"/>
+            </div>
+            <div className="p-1 pt-0"><SkeletonLoader background="#ccc"/></div>
+            <div className="p-1 pt-0"><SkeletonLoader background="#ccc"/></div>
+          </div>
+        </div>
+        <div className="list-group-item col-6 p-1 border-0 rounded-0">
+          <div className="card">
+            <div className="p-1 border-bottom">
+              <SkeletonLoader background="#ccc" height="120px"/>
+            </div>
+            <div className="p-1 pt-0"><SkeletonLoader background="#ccc"/></div>
+            <div className="p-1 pt-0"><SkeletonLoader background="#ccc"/></div>
+          </div>
+        </div>
+      </div>
     : <div className="list-unstyled list-group list-group-horizontal overflow-auto">
         {
           args[2].map((product, index) => (
             <Link key={index + Math.random(9)} to={"/produk/" + product.kode} className="list-group-item text-decoration-none p-1 border-0 rounded-0 text-dark text-center col-6">
               <div className="card list-group-item-action" value={product.kode}>
                 <img src={product.foto} className="card-img-top p-1 border-bottom" alt={"Photo: " + product.kode}/>
-                <p className="card-text"><small><b>{product.kode}</b></small></p>
+                <small className="card-text"><b>{product.kode}</b></small>
+                <span className="card-text">
+                  <b>{"Rp " + new Intl.NumberFormat("id-ID").format(product.harga)}</b>
+                </span>
               </div>
             </Link>
           ))

@@ -18,7 +18,6 @@ import Helper from "./REST/Helper"
 
 function App(props) {
 	let [active, setActive] = React.useState(false)
-	let [classes, setClasses] = React.useState("left")
   let [ids, setIds] = React.useState("")
 
   React.useEffect(() => {
@@ -38,10 +37,10 @@ function App(props) {
 		e.preventDefault()
     let elementID = e.currentTarget.id
 		switch (elementID.split(" ")[1]) {
-			case "top-side" : setIds(elementID); setClasses("top rounded-bottom w-100 h-auto mh-75"); break
-			case "right-side" : setIds(elementID); setClasses("right w-75 h-50 rounded-left"); break
-			case "bottom-side" : setIds(elementID); setClasses("bottom rounded-top w-100 h-50"); break
-			default : setIds(elementID); setClasses("left w-75 h-100"); break
+			case "top-side" : setIds("top-side"); break
+			case "right-side" : setIds("right-side"); break
+			case "bottom-side" : setIds("bottom-side"); break
+			default : setIds("left-side"); break
 		}
 		setActive(!active)
 	}
@@ -69,7 +68,7 @@ function App(props) {
           <Route exact path="/produk/:kode" component={Detail}/>
         </Route>
       </Switch>
-      <Wrapper active={active} ids={ids} classes={classes} toggleWrapper={() => setActive(!active)}/>
+      <Wrapper active={active} ids={ids} toggleWrapper={() => setActive(!active)}/>
       <div className={"overlay" + (active ? " active" : "")} onClick={(e) => setActive(!active)}></div>
     </Router>
   )
