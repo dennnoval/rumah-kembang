@@ -3,20 +3,20 @@ import axios from 'axios'
 const Product = {
 	index : () => {
 		return axios.create({
-			baseURL: "https://rumah-kembang-api.herokuapp.com/api/v1/Category"
+			baseURL: "https://rumah-kembang-api.vercel.app/api/v1/Category"
 		})
 	},
 	getAllProducts : (token) => {
 		return axios({
       method: "GET",
-      url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Product/getAllProducts',
+      url: 'https://rumah-kembang-api.vercel.app/api/v1/Product/getAllProducts',
       cancelToken: token
     })
 	},
 	getProductByID : function(token, kode) {
 		return axios({
       method: "POST",
-      url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Product/getProductByID',
+      url: 'https://rumah-kembang-api.vercel.app/api/v1/Product/getProductByID',
       data: {kode : kode},
       cancelToken: token
     })
@@ -24,7 +24,7 @@ const Product = {
 	getProductByCategory : function(token, categoryName) {
 		return axios({
       method: "POST",
-      url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Product/getProductByCategory',
+      url: 'https://rumah-kembang-api.vercel.app/api/v1/Product/getProductByCategory',
       data: {categoryName : categoryName},
       cancelToken: token
     })
@@ -32,7 +32,7 @@ const Product = {
   getProductByTag : function(token, tagName) {
     return axios({
       method: "POST",
-      url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Product/getProductByTag',
+      url: 'https://rumah-kembang-api.vercel.app/api/v1/Product/getProductByTag',
       data: {tagName : tagName},
       cancelToken: token
     })
@@ -40,7 +40,7 @@ const Product = {
 	getProductByRecommend : function(token) {
 		return axios({
       method: "GET",
-      url: "https://rumah-kembang-api.herokuapp.com/api/v1/Product/getProductByRecommend",
+      url: "https://rumah-kembang-api.vercel.app/api/v1/Product/getProductByRecommend",
       cancelToken: token
     })
 	}
