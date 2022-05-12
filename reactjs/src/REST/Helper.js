@@ -4,7 +4,7 @@ const Helper = {
 	generateRandomId : (token, customerId) => {
 		return axios({
       method: "GET",
-      url: 'https://rumah-kembang-api.herokuapp.com/api/v1/Helper/generateRandomId',
+      url: 'https://rumah-kembang-api.vercel.app/api/v1/Helper/generateRandomId',
       cancelToken: token
     })
 	}
