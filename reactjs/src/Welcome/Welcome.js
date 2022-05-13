@@ -143,7 +143,7 @@ function Welcome(props) {
             Follow us on : 
           </div>
           <div className="col px-0">
-            <a href="https://instagram.com/rumahkembang29" target="new-tab">
+            <a href="https://instagram.com" target="new-tab">
               <img src={instagramIcon} className="img-fluid" alt="..." style={{"width":"20px"}}/>
             </a>
           </div>
